@@ -8,6 +8,9 @@ brew "dive"
 brew "git"
 brew "neovim", args: ["HEAD"]
 brew "zsh"
+  
+brew "python@3.9"
 
 brew "d12frosted/emacs-plus/emacs-plus@27"
 cask "amethyst"
+cask "visual-studio-code"
