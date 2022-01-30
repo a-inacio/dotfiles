@@ -24,3 +24,6 @@ if [ "$system_type" = "Darwin" ]; then
   fi
 
 fi
+
+# Setup SpaceVim
+curl -sLf https://spacevim.org/install.sh | bash
