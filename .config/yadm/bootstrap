@@ -1,0 +1,26 @@
+#!/bin/sh
+
+cd "$HOME"
+echo "Init submodules"
+yadm submodule update --recursive --init
+
+system_type=$(uname -s)
+
+if [ "$system_type" = "Darwin" ]; then
+
+  # well 🥴... looks like a 🐓 and 🥚 problem here...
+  # we likely already have brew installed because that is what
+  # we likely used to install yadm to begin with...
+
+  # install homebrew if it's missing
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing homebrew"
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+
+  if [ -f "$HOME/.Brewfile" ]; then
+    echo "Updating homebrew bundle"
+    brew bundle --global
+  fi
+
+fi
