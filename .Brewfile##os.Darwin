@@ -1,0 +1,13 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+
+tap "d12frosted/emacs-plus"
+
+brew "dive"
+brew "git"
+brew "neovim", args: ["HEAD"]
+brew "zsh"
+
+brew "d12frosted/emacs-plus/emacs-plus@27"
+cask "amethyst"
