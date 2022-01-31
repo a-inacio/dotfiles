@@ -1,1 +1,0 @@
-  nnoremap <leader>a ggVG
