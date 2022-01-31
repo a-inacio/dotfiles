@@ -1,0 +1,3 @@
+[submodule ".config/vim"]
+	path = .config/vim
+	url = https://github.com/a-inacio/dotfiles-vim
