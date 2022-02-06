@@ -13,3 +13,5 @@ alias pbpwd="pwd|pbcopy"
 alias pbcd="cd \"`pbpaste`\""
 
 alias ..="cd .."
+
+alias grlias="alias | grep"

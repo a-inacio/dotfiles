@@ -7,10 +7,14 @@ tap "d12frosted/emacs-plus"
 brew "dive"
 brew "git"
 brew "neovim", args: ["HEAD"]
-brew "zsh"
-  
+brew "d12frosted/emacs-plus/emacs-plus@27"
+
 brew "python@3.9"
 
-brew "d12frosted/emacs-plus/emacs-plus@27"
+brew "zsh"
+brew "thefuck"
+brew "fzf"
+
 cask "amethyst"
 cask "visual-studio-code"
+cask "iterm2"
