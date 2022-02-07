@@ -1,0 +1,11 @@
+== Dotfiles
+
+Powered by https://yadm.io/docs/install[Yadm].
+
+== Setup
+
+=== Neovim
+
+After opening Neovim for the first time, and plugins are installed.
+
+Go into `~/.cache/vimfiles/repos/github.com/neoclide/coc.nvim` and run `yarn install`.
