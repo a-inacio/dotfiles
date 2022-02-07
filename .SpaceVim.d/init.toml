@@ -10,18 +10,20 @@
     enable_tabline_filetype_icon = true
     enable_statusline_mode = false
 
+    autocomplete_method = "coc"
+
     bootstrap_before = 'ainacio#before'
 
 # Enable autocomplete layer
 [[layers]]
-name = 'autocomplete'
-auto_completion_return_key_behavior = "complete"
-auto_completion_tab_key_behavior = "smart"
+    name = 'autocomplete'
+    auto_completion_return_key_behavior = "complete"
+    auto_completion_tab_key_behavior = "smart"
 
 [[layers]]
-name = 'shell'
-default_position = 'top'
-default_height = 30
+    name = 'shell'
+    default_position = 'top'
+    default_height = 30
 
 # TODO - check https://github.com/SpaceVim/SpaceVim/issues/1882
 [[layers]]
@@ -30,6 +32,10 @@ default_height = 30
 # Plugins
 [[custom_plugins]]
     repo = "https://github.com/junegunn/fzf.vim"
+    merged = 0
+
+[[custom_plugins]]
+    repo = "https://github.com/junegunn/fzf"
     merged = 0
 
 [[custom_plugins]]

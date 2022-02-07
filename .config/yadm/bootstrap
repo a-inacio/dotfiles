@@ -25,5 +25,28 @@ if [ "$system_type" = "Darwin" ]; then
 
 fi
 
+# Setup nvm
+command -v nvm >/dev/null 2>&1 || {
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+}
+
+# Setup nodejs
+command -v node >/dev/null 2>&1 || {
+  # Install node 16
+  echo "Node JS not found, installing..."
+  nvm install 16
+  nvm use 16
+}
+
+# Setup nodejs
+command -v yarn >/dev/null 2>&1 || {
+  # Install yarn
+  echo "Yarn not found, installing..."
+  npm install yarn -g
+}
+
 # Setup SpaceVim
 curl -sLf https://spacevim.org/install.sh | bash
