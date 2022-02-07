@@ -22,3 +22,16 @@ auto_completion_tab_key_behavior = "smart"
 name = 'shell'
 default_position = 'top'
 default_height = 30
+
+# TODO - check https://github.com/SpaceVim/SpaceVim/issues/1882
+[[layers]]
+    name = "fzf"
+
+# Plugins
+[[custom_plugins]]
+    repo = "https://github.com/junegunn/fzf.vim"
+    merged = 0
+
+[[custom_plugins]]
+    repo = "https://github.com/junegunn/fzf"
+    merged = 0
