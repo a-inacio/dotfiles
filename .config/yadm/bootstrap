@@ -48,5 +48,11 @@ command -v yarn >/dev/null 2>&1 || {
   npm install yarn -g
 }
 
+# Setup gotags (also required for SpaceVim's Golang layer)
+go install github.com/jstemmer/gotags@latest
+
+pip3 install --upgrade pip
+python3 -m pip install --upgrade pynvim
+
 # Setup SpaceVim
 curl -sLf https://spacevim.org/install.sh | bash
