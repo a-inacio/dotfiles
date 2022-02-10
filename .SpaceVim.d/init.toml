@@ -13,8 +13,6 @@
     autocomplete_method = "coc"
 
     bootstrap_before = 'ainacio#before'
-    snippet_engine = "neosnipets"
-
 
 # Enable autocomplete layer
 [[layers]]
@@ -46,3 +44,7 @@
 
 [[layers]]
   name = "lang#go"
+
+[[layers]]
+    name = 'lang#javascript'
+    format_on_save = true
