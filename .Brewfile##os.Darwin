@@ -3,6 +3,7 @@ tap "homebrew/cask"
 tap "homebrew/core"
 
 tap "d12frosted/emacs-plus"
+tap "microsoft/git"
 
 brew "dive"
 brew "git"
@@ -19,3 +20,4 @@ brew "go"
 cask "amethyst"
 cask "visual-studio-code"
 cask "iterm2"
+cask "git-credential-manager-core"
