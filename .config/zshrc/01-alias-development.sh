@@ -10,6 +10,7 @@ ksh() {
 }
 
 alias dc="docker compose"
+alias dbash="docker run -it --entrypoint /bin/bash"
 
 alias plias="alias | grep \"^pl"\"
 
