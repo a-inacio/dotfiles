@@ -10,6 +10,7 @@ ksh() {
 }
 
 alias dc="docker compose"
+# https://phoenixnap.com/kb/docker-run-override-entrypoint
 alias dbash="docker run -it --entrypoint /bin/bash"
 
 alias plias="alias | grep \"^pl"\"
