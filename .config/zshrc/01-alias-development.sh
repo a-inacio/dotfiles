@@ -5,6 +5,10 @@ alias k=kubectl
 alias kx=kubectx
 alias kns=kubens
 
+ksh() {
+  kubectl exec --stdin --tty $1 -- /bin/bash
+}
+
 alias dc="docker compose"
 
 alias plias="alias | grep \"^pl"\"
@@ -120,3 +124,8 @@ alias wogo="cat ~/.gworkon | tr -d '\r\n' | xargs open"
 # Convential commits with the current task link added to the clipboard
 alias cz="_gworkon && git-cz"
 # --disable-emoji"
+
+pbclone() {
+  echo "Cloning \""`pbpaste`"\"... 🤞"
+  git clone `pbpaste` $1
+}

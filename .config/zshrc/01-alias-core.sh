@@ -8,7 +8,6 @@ alias x="exit"
 alias t="tree -L 2"
 alias tt="tree -L 3"
 
-alias pbclone=~/.sbin/pbclone
 alias pbpwd="pwd|pbcopy"
 alias pbcd="cd \"`pbpaste`\""
 
