@@ -1,9 +1,11 @@
-alias sz="source ~/.zshrc"
-alias ez="vim ~/.zshrc"
+alias sz="source ~/.config/zshrc/00-all.sh"
+alias ez="vim ~/.config/zshrc/00-all.sh"
+
+alias szz="source ~/.zshrc"
+alias ezz="vim ~/.zshrc"
 
 alias ll="ls -l"
 alias la="ls -a"
-alias x="exit"
 
 alias t="tree -L 2"
 alias tt="tree -L 3"

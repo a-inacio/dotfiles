@@ -16,10 +16,7 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source ~/.config/zshrc/01-alias-core.sh
-source ~/.config/zshrc/01-alias-tools.sh
-source ~/.config/zshrc/01-alias-development.sh
-source ~/.config/zshrc/02-bindings.sh
+source ~/.config/zshrc/00-all.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
