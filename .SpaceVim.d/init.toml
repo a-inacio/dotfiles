@@ -29,22 +29,30 @@
 [[layers]]
     name = "fzf"
 
-# Plugins
-[[custom_plugins]]
-    repo = "https://github.com/junegunn/fzf.vim"
-    merged = 0
-
-[[custom_plugins]]
-    repo = "https://github.com/junegunn/fzf"
-    merged = 0
-
-[[custom_plugins]]
-    repo = "https://github.com/junegunn/fzf"
-    merged = 0
-
 [[layers]]
   name = "lang#go"
 
 [[layers]]
     name = 'lang#javascript'
     format_on_save = true
+
+# Plugins
+[[custom_plugins]]
+    repo = "https://github.com/junegunn/fzf.vim"
+    merged = false
+
+[[custom_plugins]]
+    repo = "https://github.com/junegunn/fzf"
+    merged = false
+
+[[custom_plugins]]
+    repo = "https://github.com/junegunn/fzf"
+    merged = false
+
+[[custom_plugins]]
+    repo = 'tpope/vim-unimpaired'
+    meged = false
+
+[[custom_plugins]]
+    repo = 'tpope/vim-repeat'
+    meged = false
