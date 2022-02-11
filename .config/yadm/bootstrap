@@ -41,7 +41,7 @@ command -v node >/dev/null 2>&1 || {
   nvm use 16
 }
 
-# Setup nodejs
+# Setup yarn
 command -v yarn >/dev/null 2>&1 || {
   # Install yarn
   echo "Yarn not found, installing..."
