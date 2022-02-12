@@ -30,6 +30,9 @@ export NVM_DIR="$HOME/.nvm"
 export PYTHON3_HOST_PROG=`which python3`
 export PYTHON_HOST_PROG=`which python`
 
+# Enable Vi mode
+bindkey -v
+
 # sdkman claims needing to be added to the end 🥴
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
