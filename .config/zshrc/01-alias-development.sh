@@ -96,6 +96,7 @@ _ggo(){
 # Yadm
 # ------------------------------------------------------------------------------
 alias ylias='alias | grep "='\''yadm"'
+alias yboot="yadm bootstrap"
 alias ys="yadm status"
 alias ya="yadm add"
 alias yaa="yadm add -u && yadm status"

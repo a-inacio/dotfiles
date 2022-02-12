@@ -10,6 +10,8 @@ alias la="ls -a"
 alias t="tree -L 2"
 alias tt="tree -L 3"
 
+alias ff="grep -rnw . -e"
+
 alias pbpwd="pwd|pbcopy"
 alias pbcd="cd \"`pbpaste`\""
 
