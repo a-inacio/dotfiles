@@ -13,6 +13,7 @@ brew "d12frosted/emacs-plus/emacs-plus@27"
 brew "python@3.9"
 
 brew "zsh"
+brew "tmux"
 brew "thefuck"
 brew "fzf"
 brew "go"

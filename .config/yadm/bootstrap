@@ -56,3 +56,11 @@ python3 -m pip install --upgrade pynvim
 
 # Setup SpaceVim
 curl -sLf https://spacevim.org/install.sh | bash
+
+# Setup tmux's plugin manager (tpm)
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+else
+  echo "Updationg tmux's tpm..."
+  git -C ~/.tmux/plugins/tpm pull
+fi
