@@ -14,7 +14,7 @@ let s:coc_extensions = [
       \ 'coc-json',
       \ 'coc-tag',
       \ 'coc-snippets',
-      \ 'coc-neosnippet',
+      \ 'coc-ultisnips',
       \ 'coc-prettier',
       \]
 

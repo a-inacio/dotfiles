@@ -31,15 +31,15 @@ alias plcset="pulumi config set"
 alias plcget="pulumi config get"
 alias plcget64="plconfget64"
 plkconfget() {
-	pulumi stack output kubeConfig --show-secrets > .plkconf.kubeconfig
-	KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten > .plkconf.merged.kubeconfig
-	mv .plkconf.merged.kubeconfig ~/.kube/config
-	rm -rf .plkconf.kubeconfig
-	chmod go-r ~/.kube/config 
+  pulumi stack output kubeConfig --show-secrets > .plkconf.kubeconfig
+  KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten > .plkconf.merged.kubeconfig
+  mv .plkconf.merged.kubeconfig ~/.kube/config
+  rm -rf .plkconf.kubeconfig
+  chmod go-r ~/.kube/config 
 }
 
 plconfget64() {
-	pulumi config get  --path ${1} | jq .'"'${2}'"' -r | base64 -d
+  pulumi config get  --path ${1} | jq .'"'${2}'"' -r | base64 -d
 }
 
 export PULUMI_K8S_SUPPRESS_DEPRECATION_WARNINGS=true
@@ -70,6 +70,7 @@ alias gp="git pull --rebase"
 alias gc="git commit"
 alias gP="git pull --rebase && git push"
 alias gd="git diff"
+alias gds="git diff --staged"
 alias gChor="git remote set-url origin"
 alias gAor="git remote add origin"
 alias gSu="git submodule update --remote --merge"
@@ -89,7 +90,7 @@ alias gPor="git branch --show-current | xargs -I {} git -c 'push --set-upstream 
 # Open the repo page in the browser
 alias ggo="_ggo"
 _ggo(){
-	echo "https://gitlab.com/"`cut -d '.' -f1 <<< $(cut -d ':' -f2 <<< $(git ls-remote --get-url))` | xargs open;
+  echo "https://gitlab.com/"`cut -d '.' -f1 <<< $(cut -d ':' -f2 <<< $(git ls-remote --get-url))` | xargs open;
 }
 
 # ------------------------------------------------------------------------------
@@ -106,6 +107,7 @@ alias yp="yadm pull"
 alias yc="yadm commit"
 alias yP="yadm pull && yadm push"
 alias yd="yadm diff"
+alias yds="yadm diff --staged"
 alias ySu="yadm submodule update --remote --merge"
 alias ySi="yadm submodule update --init --recursive"
 
@@ -119,7 +121,7 @@ alias yUc="yadm reset HEAD^ && yadm status"
 # Productivity
 # ------------------------------------------------------------------------------
 _gworkon(){
-	[ -z "$1" ] && cat ~/.gworkon | tr -d '\r\n' | pbcopy || echo $1 > ~/.gworkon
+  [ -z "$1" ] && cat ~/.gworkon | tr -d '\r\n' | pbcopy || echo $1 > ~/.gworkon
 }
 
 # Keep the current task for an easier reference later

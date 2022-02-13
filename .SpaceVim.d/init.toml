@@ -11,6 +11,7 @@
     enable_statusline_mode = false
 
     autocomplete_method = "coc"
+    snippet_engine = "ultisnips"
 
     bootstrap_before = 'ainacio#before'
 
@@ -55,4 +56,21 @@
 
 [[custom_plugins]]
     repo = 'tpope/vim-repeat'
+    meged = false
+
+# telescope requirements...
+[[custom_plugins]]
+    repo = 'nvim-lua/popup.nvim'
+    meged = false
+
+[[custom_plugins]]
+    repo = 'nvim-lua/plenary.nvim'
+    meged = false
+
+[[custom_plugins]]
+    repo = 'nvim-telescope/telescope.nvim'
+    meged = false
+
+[[custom_plugins]]
+    repo = 'nvim-telescope/telescope-fzy-native.nvim'
     meged = false

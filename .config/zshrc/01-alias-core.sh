@@ -27,3 +27,8 @@ alias tez="vim ~/.tmux.conf"
 function tk(){
   tmux list-sessions | grep -v attached | awk 'BEGIN{FS=":"}{print $1}' | xargs -n 1 tmux kill-session -t
 }
+
+unalias vim > /dev/null 2>&1
+alias vi=`which vim`
+alias vim=`which nvim`
+alias v=vim

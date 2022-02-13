@@ -54,6 +54,8 @@ go install github.com/jstemmer/gotags@latest
 pip3 install --upgrade pip
 python3 -m pip install --upgrade pynvim
 
+npm install -g neovim
+
 # Setup SpaceVim
 curl -sLf https://spacevim.org/install.sh | bash
 
