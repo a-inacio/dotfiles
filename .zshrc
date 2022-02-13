@@ -5,6 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Enable Vi mode
+bindkey -v
+
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -29,9 +32,6 @@ export NVM_DIR="$HOME/.nvm"
 # SpaceVim - python support for neovim
 export PYTHON3_HOST_PROG=`which python3`
 export PYTHON_HOST_PROG=`which python`
-
-# Enable Vi mode
-bindkey -v
 
 # sdkman claims needing to be added to the end 🥴
 export SDKMAN_DIR="$HOME/.sdkman"
