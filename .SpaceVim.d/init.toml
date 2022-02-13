@@ -37,6 +37,9 @@
     name = 'lang#javascript'
     format_on_save = true
 
+[[layers]]
+  name = "lang#lua"
+
 # Plugins
 [[custom_plugins]]
     repo = "https://github.com/junegunn/fzf.vim"
