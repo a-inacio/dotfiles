@@ -1,15 +1,16 @@
 function! ainacio#before() abort
+  if !empty($VIM_DOTFILES_DIR)
+    let g:vim_dotfiles_dir = $VIM_DOTFILES_DIR
+  else
+    let g:vim_dotfiles_dir = '~/.config/vim'
+  endif
+
   let g:coc_config_home = '~/.SpaceVim.d/'
 
 lua << EOF
   -- allows importing lua packages from the dotfiles-vim folder
-  package.path = ";" .. os.getenv("VIM_DOTFILES_DIR") .. "/lua/?.lua;" .. package.path
+  package.path = ";" .. vim.g['vim_dotfiles_dir'] .. "/lua/?.lua;" .. package.path
 EOF
 
-  "  for fpath in split(globpath('~/.vimrc.d/', '*.vim'), '\n')
-  "    exe 'source' fpath
-  " endfor
-
-  " TODO remove hardcoded basepath
-  source ~/.config/vim/init.vim
+  exe 'source' g:vim_dotfiles_dir . "/init.vim"
 endfunction
