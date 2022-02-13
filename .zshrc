@@ -21,6 +21,9 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.config/zshrc/00-all.sh
 
+export VISUAL=nvim
+export EDITOR=nvim
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval $(thefuck --alias)

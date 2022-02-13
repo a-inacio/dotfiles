@@ -17,6 +17,7 @@ brew "zsh-vi-mode"
 brew "tmux"
 brew "thefuck"
 brew "fzf"
+brew "ranger"
 brew "go"
 
 cask "amethyst"
