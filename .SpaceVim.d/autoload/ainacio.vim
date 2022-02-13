@@ -6,6 +6,10 @@ lua << EOF
   package.path = ";" .. os.getenv("VIM_DOTFILES_DIR") .. "/lua/?.lua;" .. package.path
 EOF
 
-  source ~/.config/vim/core.vim
-  source ~/.config/vim/preferences.vim
+  "  for fpath in split(globpath('~/.vimrc.d/', '*.vim'), '\n')
+  "    exe 'source' fpath
+  " endfor
+
+  " TODO remove hardcoded basepath
+  source ~/.config/vim/init.vim
 endfunction
