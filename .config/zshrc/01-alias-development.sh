@@ -63,6 +63,8 @@ alias killport='_scanportpid(){ kill -9 `lsof -nP -i:"$1" | grep LISTEN | awk '"
 # Too much bloat, but a good inspiration
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
 alias glias='alias | grep "='\''git"'
+
+alias g="git"
 alias gs="git status"
 alias ga="git add"
 alias gaa="git add . && git status"
@@ -76,6 +78,8 @@ alias gAor="git remote add origin"
 alias gSu="git submodule update --remote --merge"
 alias gSi="git submodule update --init --recursive"
 alias gR="git restore"
+alias gco="git checkout"
+alias gba="git branch --all"
 
 # Undo add
 alias gUa="git restore --stage . && git status"

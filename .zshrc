@@ -8,6 +8,8 @@ fi
 # Enable Vi mode
 bindkey -v
 
+export PATH=$HOME/.sbin:${PATH}
+
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
