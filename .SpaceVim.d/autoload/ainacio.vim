@@ -14,3 +14,15 @@ EOF
 
   exe 'source' g:vim_dotfiles_dir . "/init.vim"
 endfunction
+
+
+function! ainacio#after() abort
+  for fpath in split(globpath('~/.config/vim/plugin/', '*.vim'), '\n')
+    exe 'source' fpath
+  endfor
+
+  for fpath in split(globpath('~/.config/vim/plugin/', '*.nvim'), '\n')
+    exe 'source' fpath
+  endfor
+endfunction
+

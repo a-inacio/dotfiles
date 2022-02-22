@@ -21,6 +21,8 @@ brew "thefuck"
 brew "fzf"
 brew "ranger"
 brew "go"
+brew "ripgrep"
+brew "zoxide"
 
 cask "amethyst"
 cask "visual-studio-code"
