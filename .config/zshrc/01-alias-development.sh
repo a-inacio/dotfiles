@@ -114,6 +114,7 @@ alias yd="yadm diff"
 alias yds="yadm diff --staged"
 alias ySu="yadm submodule update --remote --merge"
 alias ySi="yadm submodule update --init --recursive"
+alias ySa="yadm submodule add"
 
 # Undo add
 alias yUa="yadm restore --stage . && yadm status"
