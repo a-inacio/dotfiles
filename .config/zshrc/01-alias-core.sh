@@ -19,7 +19,9 @@ alias ..="cd .."
 
 alias grlias="alias | grep"
 
+#inspiration for more https://tmuxcheatsheet.com/
 alias t="tmux"
+alias ta="tmux a"
 alias tls="tmux ls"
 alias tsz="tmux source ~/.tmux.conf"
 alias tez="vim ~/.tmux.conf"
