@@ -9,6 +9,7 @@ fi
 bindkey -v
 
 export PATH=$HOME/.sbin:${PATH}
+export PATH=./node_modules/.bin:${PATH}
 
 export ZSH="$HOME/.oh-my-zsh"
 

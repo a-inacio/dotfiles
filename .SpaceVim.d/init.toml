@@ -44,6 +44,11 @@
 [[layers]]
   name = "lang#lua"
 
+[[layers]]
+  name = "lang#html"
+  emmet_leader_key = "<C-e>"
+  emmet_filetyps = ['html']
+
 # Plugins
 [[custom_plugins]]
     repo = "https://github.com/junegunn/fzf.vim"
