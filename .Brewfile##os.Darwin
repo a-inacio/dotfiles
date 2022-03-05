@@ -24,6 +24,8 @@ brew "go"
 brew "ripgrep"
 brew "zoxide"
 
+brew "imagemagick"
+
 cask "amethyst"
 cask "visual-studio-code"
 cask "iterm2"
