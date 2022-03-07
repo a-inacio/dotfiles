@@ -9,7 +9,7 @@ ksh() {
   kubectl exec --stdin --tty $1 -- /bin/bash
 }
 
-alias dc="docker compose"
+alias dc="docker-compose"
 # https://phoenixnap.com/kb/docker-run-override-entrypoint
 alias dbash="docker run -it --entrypoint /bin/bash"
 
