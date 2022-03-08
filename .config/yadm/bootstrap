@@ -51,6 +51,9 @@ command -v yarn >/dev/null 2>&1 || {
 # Setup gotags (also required for SpaceVim's Golang layer)
 go install github.com/jstemmer/gotags@latest
 
+# Cobra generator
+go install github.com/spf13/cobra/cobra@latest
+
 # SpaceVim HTML LSP requirement
 npm install --global vscode-html-languageserver-bin
 
