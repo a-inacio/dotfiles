@@ -6,6 +6,7 @@ tap "homebrew/cask-fonts"
 
 tap "d12frosted/emacs-plus"
 tap "microsoft/git"
+tap "bufbuild/buf"
 
 brew "dive"
 brew "git"
@@ -13,6 +14,9 @@ brew "neovim", args: ["HEAD"]
 brew "d12frosted/emacs-plus/emacs-plus@27"
 
 brew "python@3.9"
+
+brew "jq"
+brew "bufbuild/buf/buf"
 
 brew "zsh"
 brew "zsh-vi-mode"

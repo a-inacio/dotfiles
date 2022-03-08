@@ -86,3 +86,7 @@
 [[custom_plugins]]
     repo = 'nvim-telescope/telescope-fzy-native.nvim'
     meged = false
+
+[[custom_plugins]]
+    repo = 'editorconfig/editorconfig-vim'
+    merged = false

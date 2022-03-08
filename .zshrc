@@ -8,7 +8,10 @@ fi
 # Enable Vi mode
 bindkey -v
 
+export GOPATH=$HOME/go
+
 export PATH=$HOME/.sbin:${PATH}
+export PATH=$GOPATH/bin:${PATH}
 export PATH=./node_modules/.bin:${PATH}
 
 export ZSH="$HOME/.oh-my-zsh"
