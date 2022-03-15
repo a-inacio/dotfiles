@@ -30,6 +30,8 @@ brew "zoxide"
 
 brew "imagemagick"
 
+brew "kcat"
+
 cask "amethyst"
 cask "visual-studio-code"
 cask "iterm2"
