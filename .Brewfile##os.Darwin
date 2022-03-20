@@ -32,6 +32,8 @@ brew "imagemagick"
 
 brew "kcat"
 
+brew "grpcurl"
+
 cask "amethyst"
 cask "visual-studio-code"
 cask "iterm2"
