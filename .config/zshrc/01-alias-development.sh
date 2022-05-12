@@ -78,6 +78,7 @@ alias gAor="git remote add origin"
 alias gSu="git submodule update --remote --merge"
 alias gSi="git submodule update --init --recursive"
 alias gR="git restore"
+alias gRH="git reset --hard"
 alias gco="git checkout"
 alias gba="git branch --all"
 
