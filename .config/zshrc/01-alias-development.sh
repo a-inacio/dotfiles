@@ -31,7 +31,7 @@ alias plcset="pulumi config set"
 alias plcget="pulumi config get"
 alias plcget64="plconfget64"
 plkconfget() {
-  pulumi stack output kubeConfig --show-secrets > .plkconf.kubeconfig
+  pulumi stack output kubeconfig --show-secrets > .plkconf.kubeconfig
   KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten > .plkconf.merged.kubeconfig
   mv .plkconf.merged.kubeconfig ~/.kube/config
   rm -rf .plkconf.kubeconfig
@@ -81,6 +81,17 @@ alias gR="git restore"
 alias gRH="git reset --hard"
 alias gco="git checkout"
 alias gba="git branch --all"
+alias gpp="git pull --rebase --recurse-submodules"
+
+alias gI="_gI"
+_gI(){
+  git init --initial-branch=$1
+}
+
+alias gPor="_gPor"
+_gPor(){
+  git push -u origin $1
+}
 
 # Undo add
 alias gUa="git restore --stage . && git status"
@@ -90,7 +101,7 @@ alias gUa="git restore --stage . && git status"
 alias gUc="git reset HEAD^ && git status"
 
 # Push current branch to origin
-alias gPor="git branch --show-current | xargs -I {} git -c 'push --set-upstream origin {}'"
+alias gPPor="git branch --show-current | xargs -I {} git -c 'push --set-upstream origin {}'"
 
 # Open the repo page in the browser
 alias ggo="_ggo"
