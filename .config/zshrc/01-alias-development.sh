@@ -30,6 +30,13 @@ alias plkonf="plkconfget"
 alias plcset="pulumi config set"
 alias plcget="pulumi config get"
 alias plcget64="plconfget64"
+
+alias plchk="_plchk"
+
+_plchk() {
+    git pull --rebase && pulumi preview | awk '/./{line=$0} END{print line}'
+}
+
 plkconfget() {
   pulumi stack output kubeconfig --show-secrets > .plkconf.kubeconfig
   KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten > .plkconf.merged.kubeconfig
@@ -95,6 +102,7 @@ _gPor(){
 
 # Undo add
 alias gUa="git restore --stage . && git status"
+alias gUUa="git rm -r --cached ."
 
 # Undo commit, keep changes
 # https://stackoverflow.com/questions/15772134/can-i-delete-a-git-commit-but-keep-the-changes
@@ -105,8 +113,30 @@ alias gPPor="git branch --show-current | xargs -I {} git -c 'push --set-upstream
 
 # Open the repo page in the browser
 alias ggo="_ggo"
+
+# Project url (TODO only working for gitlab for now!)
+alias ggurl="_ggurl"
+
+# Project path
+alias ggpath="_ggpath"
+
+# Project name
+alias ggname="_ggname"
+
+_ggname(){
+  basename `_ggpath`
+}
+
 _ggo(){
-  echo "https://gitlab.com/"`cut -d '.' -f1 <<< $(cut -d ':' -f2 <<< $(git ls-remote --get-url))` | xargs open;
+  echo "https://"`_ggurl` | xargs open;
+}
+
+_ggpath(){
+  echo `cut -d '.' -f1 <<< $(cut -d ':' -f2 <<< $(git ls-remote --get-url))`
+}
+
+_ggurl(){
+  echo "gitlab.com/"`_ggpath`
 }
 
 # ------------------------------------------------------------------------------
@@ -146,8 +176,7 @@ alias wo="_gworkon"
 alias wogo="cat ~/.gworkon | tr -d '\r\n' | xargs open"
 
 # Convential commits with the current task link added to the clipboard
-alias cz="_gworkon && git-cz"
-# --disable-emoji"
+alias cz="_gworkon && git-cz --disable-emoji"
 
 pbclone() {
   echo "Cloning \""`pbpaste`"\"... 🤞"

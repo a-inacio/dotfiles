@@ -13,11 +13,16 @@ alias ltt="tree -L 3"
 alias ff="grep -rnw . -e"
 
 alias pbpwd="pwd|pbcopy"
-alias pbcd="cd \"`pbpaste`\""
+alias pbcd="cd $(pbpaste)"
 
 alias ..="cd .."
 
 alias grlias="alias | grep"
+
+alias me="curl ifconfig.me"
+
+# if we have `z`, then it becomes our `cd`
+if command -v z >/dev/null 2>&1; then alias cd='z'; fi
 
 #inspiration for more https://tmuxcheatsheet.com/
 alias t="tmux"
