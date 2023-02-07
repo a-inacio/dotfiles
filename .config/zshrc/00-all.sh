@@ -14,6 +14,4 @@ if [ -d "$__extras_path" ]; then
       source "$script"
     fi
   done
-else
-  echo "> $__extras_path"
 fi
