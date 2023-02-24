@@ -22,7 +22,7 @@ alias grlias="alias | grep"
 alias me="curl ifconfig.me"
 
 # if we have `z`, then it becomes our `cd`
-if command -v z >/dev/null 2>&1; then alias cd='z'; fi
+#if command -v z >/dev/null 2>&1; then alias cd='z'; fi
 
 #inspiration for more https://tmuxcheatsheet.com/
 alias t="tmux"
