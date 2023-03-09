@@ -30,6 +30,7 @@ alias plkonf="plkconfget"
 alias plcset="pulumi config set"
 alias plcget="pulumi config get"
 alias plcget64="plconfget64"
+alias plfix="rm -rf node_modules && yarn"
 
 alias plchk="_plchk"
 
