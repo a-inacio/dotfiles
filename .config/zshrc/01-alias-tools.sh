@@ -8,3 +8,5 @@ alias gvim="Emacs"
 if  [ -f "/opt/homebrew/bin/brew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+
+alias bfix='brew cleanup ; brew doctor ; brew update ; brew upgrade'
