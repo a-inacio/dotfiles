@@ -21,6 +21,8 @@ alias grlias="alias | grep"
 
 alias me="curl ifconfig.me"
 
+alias fdns="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder"
+
 # if we have `z`, then it becomes our `cd`
 #if command -v z >/dev/null 2>&1; then alias cd='z'; fi
 
