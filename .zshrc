@@ -30,7 +30,11 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Custom configs
 source ~/.config/zshrc/00-all.sh
+
+# Initialize completion
+compinit
 
 export VISUAL=nvim
 export EDITOR=nvim

@@ -12,6 +12,21 @@ alias ltt="tree -L 3"
 
 alias ff="grep -rnw . -e"
 
+alias pbf=_pbf
+_pbf(){
+  osascript \
+    -e 'on run args' \
+    -e 'set the clipboard to POSIX file args'\
+    -e end \
+    "$(greadlink -f -- $1)"
+}
+
+_pbf_completion() {
+     _files
+}
+compdef _pbf_completion pbf
+
+
 alias pbpwd="pwd|pbcopy"
 alias pbcd="cd $(pbpaste)"
 
