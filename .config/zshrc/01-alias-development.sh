@@ -11,7 +11,13 @@ ksh() {
 
 alias dc="docker-compose"
 # https://phoenixnap.com/kb/docker-run-override-entrypoint
-alias dbash="docker run -it --entrypoint /bin/bash"
+alias drsh="docker run -it --entrypoint /bin/bash"
+
+# https://phoenixnap.com/kb/how-to-ssh-into-docker-container
+alias dsh="_dsh"
+_dsh() {
+    docker exec -it $1 /bin/bash
+}
 
 alias plias="alias | grep \"^pl"\"
 
