@@ -117,7 +117,7 @@ alias gUUa="git rm -r --cached ."
 alias gUc="git reset HEAD^ && git status"
 
 # Push current branch to origin
-alias gPPor="git branch --show-current | xargs -I {} git -c 'push --set-upstream origin {}'"
+alias gPPor="git branch --show-current | xargs -I {} bash -c 'git push --set-upstream origin {}'"
 
 # Open the repo page in the browser
 alias ggo="_ggo"
