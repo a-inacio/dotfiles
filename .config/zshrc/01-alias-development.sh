@@ -98,6 +98,11 @@ alias gco="git checkout"
 alias gba="git branch --all"
 alias gpp="git pull --rebase --recurse-submodules"
 
+alias gClean="_gClean"
+_gClean(){
+  git status --porcelain .| awk '{if ($1 == "??") print $2}' | xargs -I {} rm -rf {}
+}
+
 alias gI="_gI"
 _gI(){
   git init --initial-branch=$1
