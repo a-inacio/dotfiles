@@ -103,6 +103,8 @@ _gClean(){
   git status --porcelain .| awk '{if ($1 == "??") print $2}' | xargs -I {} rm -rf {}
 }
 
+alias gNuke="git reset --hard && git clean -fdx"
+
 alias gI="_gI"
 _gI(){
   git init --initial-branch=$1
@@ -115,7 +117,10 @@ _gPor(){
 
 # Undo add
 alias gUa="git restore --stage . && git status"
-alias gUUa="git rm -r --cached ."
+
+# Forgot what this does 🙈... tried it and it removed everything
+# Next time best to explain...
+#alias gUUa="git rm -r --cached ."
 
 # Undo commit, keep changes
 # https://stackoverflow.com/questions/15772134/can-i-delete-a-git-commit-but-keep-the-changes
