@@ -19,6 +19,11 @@ _dsh() {
     docker exec -it $1 /bin/bash
 }
 
+alias dshroot="_dshroot"
+_dshroot() {
+    docker exec -u 0 -it $1 /bin/bash
+}
+
 alias plias="alias | grep \"^pl"\"
 
 alias pl=pulumi
@@ -45,7 +50,7 @@ _plchk() {
 }
 
 plkconfget() {
-  pulumi stack output kubeconfig --show-secrets > .plkconf.kubeconfig
+  pulumi stack output ${1:-kubeconfig} --show-secrets > .plkconf.kubeconfig
   KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten > .plkconf.merged.kubeconfig
   mv .plkconf.merged.kubeconfig ~/.kube/config
   rm -rf .plkconf.kubeconfig
@@ -94,10 +99,13 @@ alias gSu="git submodule update --remote --merge"
 alias gSi="git submodule update --init --recursive"
 alias gR="git restore"
 alias gRH="git reset --hard"
-alias gco="git checkout"
-alias gba="git branch --all"
 alias gpp="git pull --rebase --recurse-submodules"
+alias glog="git log --graph --decorate --oneline"
+alias gco="git checkout"
+alias gbs="git switch"
+alias gbls="git branch --all"
 
+# Remove all untracked files
 alias gClean="_gClean"
 _gClean(){
   git status --porcelain .| awk '{if ($1 == "??") print $2}' | xargs -I {} rm -rf {}
