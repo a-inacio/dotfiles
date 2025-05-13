@@ -39,7 +39,12 @@ compinit
 export VISUAL=nvim
 export EDITOR=nvim
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Use english (https://unix.stackexchange.com/questions/87745/what-does-lc-all-c-do)
+export LC_ALL=en_US.UTF-8
+
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source <(fzf --zsh)
 
 eval $(thefuck --alias)
 eval "$(zoxide init zsh)"
@@ -64,5 +69,3 @@ export PATH="/usr/local/sbin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terragrunt terragrunt
-
-export PATH="/usr/local/opt/libpq/bin:$PATH"
