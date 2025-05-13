@@ -9,20 +9,64 @@ ksh() {
   kubectl exec --stdin --tty $1 -- /bin/bash
 }
 
-alias dc="docker-compose"
+alias d="docker"
+alias dc="docker compose"
 # https://phoenixnap.com/kb/docker-run-override-entrypoint
 alias drsh="docker run -it --entrypoint /bin/bash"
+
+_docker_get_container_id() {
+  local search_term="$1"
+  local ids
+
+  # Try exact match on container ID prefix
+  ids=$(docker ps | awk -v term="$search_term" '$1 ~ "^"term {print $1}')
+
+  # If no match, try name match
+  if [ -z "$ids" ]; then
+    ids=$(docker ps -q --filter "name=$search_term")
+  fi
+
+  local count=$(echo "$ids" | grep -vc '^$')
+
+  if [ "$count" -gt 1 ]; then
+    echo "Multiple containers found:" >&2
+    echo "$ids" >&2
+    return 1
+  elif [ "$count" -eq 0 ]; then
+    echo "No containers found" >&2
+    return 1
+  fi
+
+  echo "$ids"
+}
 
 # https://phoenixnap.com/kb/how-to-ssh-into-docker-container
 alias dsh="_dsh"
 _dsh() {
-    docker exec -it $1 /bin/bash
+  local container_id
+  container_id=$(_docker_get_container_id "$1") || return 1
+
+  docker exec -it $container_id /bin/bash
 }
 
 alias dshroot="_dshroot"
 _dshroot() {
-    docker exec -u 0 -it $1 /bin/bash
+  local container_id
+  container_id=$(_docker_get_container_id "$1") || return 1
+
+  docker exec -u 0 -it $container_id /bin/bash
 }
+
+alias drr="_drr"
+_drr() {
+  local container_id
+  container_id=$(_docker_get_container_id "$1") || return 1
+
+  echo "Restarting container..."
+  docker restart $container_id
+}
+
+
 
 alias plias="alias | grep \"^pl"\"
 
@@ -46,19 +90,19 @@ alias plfix="rm -rf node_modules && yarn"
 alias plchk="_plchk"
 
 _plchk() {
-    git pull --rebase && pulumi preview | awk '/./{line=$0} END{print line}'
+  git pull --rebase && pulumi preview | awk '/./{line=$0} END{print line}'
 }
 
 plkconfget() {
-  pulumi stack output ${1:-kubeconfig} --show-secrets > .plkconf.kubeconfig
-  KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten > .plkconf.merged.kubeconfig
+  pulumi stack output ${1:-kubeconfig} --show-secrets >.plkconf.kubeconfig
+  KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten >.plkconf.merged.kubeconfig
   mv .plkconf.merged.kubeconfig ~/.kube/config
   rm -rf .plkconf.kubeconfig
-  chmod go-r ~/.kube/config 
+  chmod go-r ~/.kube/config
 }
 
 plconfget64() {
-  pulumi config get  --path ${1} | jq .'"'${2}'"' -r | base64 -d
+  pulumi config get --path ${1} | jq .'"'${2}'"' -r | base64 -d
 }
 
 export PULUMI_K8S_SUPPRESS_DEPRECATION_WARNINGS=true
@@ -107,19 +151,19 @@ alias gbls="git branch --all"
 
 # Remove all untracked files
 alias gClean="_gClean"
-_gClean(){
-  git status --porcelain .| awk '{if ($1 == "??") print $2}' | xargs -I {} rm -rf {}
+_gClean() {
+  git status --porcelain . | awk '{if ($1 == "??") print $2}' | xargs -I {} rm -rf {}
 }
 
 alias gNuke="git reset --hard && git clean -fdx"
 
 alias gI="_gI"
-_gI(){
+_gI() {
   git init --initial-branch=$1
 }
 
 alias gPor="_gPor"
-_gPor(){
+_gPor() {
   git push -u origin $1
 }
 
@@ -149,20 +193,20 @@ alias ggpath="_ggpath"
 # Project name
 alias ggname="_ggname"
 
-_ggname(){
-  basename `_ggpath`
+_ggname() {
+  basename $(_ggpath)
 }
 
-_ggo(){
-  echo "https://"`_ggurl` | xargs open;
+_ggo() {
+  echo "https://"$(_ggurl) | xargs open
 }
 
-_ggpath(){
-  echo `cut -d '.' -f1 <<< $(cut -d ':' -f2 <<< $(git ls-remote --get-url))`
+_ggpath() {
+  echo $(cut -d '.' -f1 <<<$(cut -d ':' -f2 <<<$(git ls-remote --get-url)))
 }
 
-_ggurl(){
-  echo "gitlab.com/"`_ggpath`
+_ggurl() {
+  echo "gitlab.com/"$(_ggpath)
 }
 
 # ------------------------------------------------------------------------------
@@ -194,8 +238,8 @@ alias yUc="yadm reset HEAD^ && yadm status"
 # ------------------------------------------------------------------------------
 # Productivity
 # ------------------------------------------------------------------------------
-_gworkon(){
-  [ -z "$1" ] && cat ~/.gworkon | tr -d '\r\n' | pbcopy || echo $1 > ~/.gworkon
+_gworkon() {
+  [ -z "$1" ] && cat ~/.gworkon | tr -d '\r\n' | pbcopy || echo $1 >~/.gworkon
 }
 
 # Keep the current task for an easier reference later
@@ -206,8 +250,8 @@ alias wogo="cat ~/.gworkon | tr -d '\r\n' | xargs open"
 alias cz="_gworkon && git-cz --disable-emoji"
 
 pbclone() {
-  echo "Cloning \""`pbpaste`"\"... 🤞"
-  git clone `pbpaste` $1
+  echo "Cloning \""$(pbpaste)"\"... 🤞"
+  git clone $(pbpaste) $1
 }
 
 # ------------------------------------------------------------------------------
@@ -215,3 +259,31 @@ pbclone() {
 # ------------------------------------------------------------------------------
 
 alias uui="uuidgen | tr '[:upper:]' '[:lower:]' | tr -d '\n' | pbcopy"
+
+_load_env() {
+  local env_file=".env"
+  if [ -n "$1" ]; then
+    env_file="$1.env"
+  fi
+
+  if [ -f "$env_file" ]; then
+    grep -E '^[^#[:space:]].*' "$env_file" | while IFS= read -r line; do
+      #safe, but does not support dynamic values
+      #export $line
+
+      #unsafe, supports dynamic values but open to arbritrary code execution!
+      key=$(printf "%s" "$line" | cut -d= -f1)
+      value=$(printf "%s" "$line" | cut -d= -f2-)
+      if [ "${value:0:1}" = "'" ] && [ "${value: -1}" = "'" ]; then
+        # as is
+        export "$key"="${value:1:-1}"
+      else
+        eval "export $key=\"${value}\""
+      fi
+    done
+  else
+    echo "Environment file '$env_file' not found."
+  fi
+}
+
+alias lenv=_load_env
