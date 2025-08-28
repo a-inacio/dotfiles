@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------------------
 # DevOps
 # ------------------------------------------------------------------------------
+alias klias='alias | grep -E "=('\''kubectl|kubectl_)"'
 alias k=kubectl
 alias kx=kubectx
 alias kns=kubens
@@ -8,6 +9,39 @@ alias kns=kubens
 ksh() {
   kubectl exec --stdin --tty $1 -- /bin/bash
 }
+
+kubectl_find() {
+  local resource="$1"
+  local pattern="$2"
+  kubectl get $resource --all-namespaces \
+    -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name \
+    --no-headers \
+    | awk '{print $1 "/" $2}' \
+    | grep -E "$pattern"
+}
+alias kff="kubectl_find"
+
+kubectl_ls() {
+  local namespace="$1"
+  for r in $(kubectl api-resources --namespaced=true -o name); do
+    kubectl get "$r" -n $namespace --no-headers -o custom-columns=METADATA:.metadata.name 2>/dev/null | awk -v kind="$r" '{print kind "/" $0}'
+  done
+}
+alias kls="kubectl_ls"
+
+# append a kubeconfig from the clipboard
+kubectl_kpbkconf() {
+  #backup
+  cp ~/.kube/config ~/.kube/config.backup.$(date +%Y%m%d%H%M%S)
+
+  pbpaste > /tmp/.pbpaste.kubeconfig
+  KUBECONFIG=/tmp/.pbpaste.kubeconfig:~/.kube/config kubectl config view --flatten > /tmp/.pbpaste.merged.kubeconfig
+  mv /tmp/.pbpaste.merged.kubeconfig ~/.kube/config
+  rm -rf /tmp/.pbpaste.kubeconfig
+  chmod go-r ~/.kube/config
+}
+alias kpbkconf="kubectl_kpbkconf"
+
 
 alias d="docker"
 alias dc="docker compose"
@@ -94,6 +128,7 @@ _plchk() {
 }
 
 plkconfget() {
+  cp ~/.kube/config ~/.kube/config.backup.$(date +%Y%m%d%H%M%S)
   pulumi stack output ${1:-kubeconfig} --show-secrets >.plkconf.kubeconfig
   KUBECONFIG=.plkconf.kubeconfig:~/.kube/config kubectl config view --flatten >.plkconf.merged.kubeconfig
   mv .plkconf.merged.kubeconfig ~/.kube/config
@@ -125,7 +160,7 @@ alias killport='_scanportpid(){ kill -9 `lsof -nP -i:"$1" | grep LISTEN | awk '"
 # ------------------------------------------------------------------------------
 # Too much bloat, but a good inspiration
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git
-alias glias='alias | grep "='\''git"'
+alias glias='alias | grep -E "=('\''git|git_)"'
 
 alias g="git"
 alias gs="git status"
@@ -134,6 +169,7 @@ alias gaa="git add . && git status"
 alias gp="git pull --rebase"
 alias gc="git commit"
 alias gP="git pull --rebase && git push"
+alias gPF="git push -f --no-verify"
 alias gPt="git pull --rebase && git push --tags"
 alias gd="git diff"
 alias gds="git diff --staged"
@@ -150,9 +186,16 @@ alias gbs="git switch"
 alias gbls="git branch --all"
 
 # Remove all untracked files
-alias gClean="_gClean"
-_gClean() {
+alias gClean="git_gClean"
+git_gClean() {
   git status --porcelain . | awk '{if ($1 == "??") print $2}' | xargs -I {} rm -rf {}
+}
+
+# Log on steroids, showing stashes
+alias glogs="git_glogs"
+git_glogs() {
+  # taken from: https://stackoverflow.com/questions/14988929/show-all-stashes-in-git-log
+  git log --oneline --graph --decorate --all $(git reflog show --format="%h" stash)
 }
 
 alias gNuke="git reset --hard && git clean -fdx"

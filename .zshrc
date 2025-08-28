@@ -67,5 +67,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terragrunt terragrunt

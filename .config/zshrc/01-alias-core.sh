@@ -26,15 +26,16 @@ _pbf_completion() {
 }
 compdef _pbf_completion pbf
 
+alias bhist="history | vim \"+normal G$\" -"
 
 alias pbpwd="pwd|pbcopy"
-alias pbcd="cd $(pbpaste)"
+alias pbcd='cd "$(pbpaste)"'
 
 alias ..="cd .."
 
 alias grlias="alias | grep"
 
-alias me="curl ifconfig.me"
+alias me="curl -4 ifconfig.me"
 
 alias fdns="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder"
 
