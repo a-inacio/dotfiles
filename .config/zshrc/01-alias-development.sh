@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# DevOps
+# kubectl
 # ------------------------------------------------------------------------------
 alias klias='alias | grep -E "=('\''kubectl|kubectl_)"'
 alias k=kubectl
@@ -41,8 +41,12 @@ kubectl_kpbkconf() {
   chmod go-r ~/.kube/config
 }
 alias kpbkconf="kubectl_kpbkconf"
+# ------------------------------------------------------------------------------
 
 
+# ------------------------------------------------------------------------------
+# Docker
+# ------------------------------------------------------------------------------
 alias d="docker"
 alias dc="docker compose"
 # https://phoenixnap.com/kb/docker-run-override-entrypoint
@@ -99,9 +103,11 @@ _drr() {
   echo "Restarting container..."
   docker restart $container_id
 }
+# ------------------------------------------------------------------------------
 
-
-
+# ------------------------------------------------------------------------------
+# Pulumi
+# ------------------------------------------------------------------------------
 alias plias="alias | grep \"^pl"\"
 
 alias pl=pulumi
@@ -141,6 +147,7 @@ plconfget64() {
 }
 
 export PULUMI_K8S_SUPPRESS_DEPRECATION_WARNINGS=true
+# ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
 # SSH / networking
@@ -154,6 +161,7 @@ alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 alias ipscan='_ipscan(){ nmap -sn $1.0/24 | grep report | sed s/Nmap\ scan\ report\ for\ //g }; _ipscan'
 alias scanport='_scanport(){ lsof -nP -i:"$1" | grep LISTEN }; _scanport'
 alias killport='_scanportpid(){ kill -9 `lsof -nP -i:"$1" | grep LISTEN | awk '"'"'{print $2}'"'"'` }; _scanportpid'
+# ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
 # Git
@@ -213,9 +221,16 @@ _gPor() {
 # Undo add
 alias gUa="git restore --stage . && git status"
 
-# Forgot what this does 🙈... tried it and it removed everything
-# Next time best to explain...
-#alias gUUa="git rm -r --cached ."
+# Untrack a file or directory, keep changes 
+alias gUntrack="git_gUntrack"
+git_gUntrack() {
+  if [ $# -eq 0 ]; then
+    echo "❌ Error: specify a file or directory to untrack." >&2
+    return 1
+  else
+    git rm -r --cached "$@" && git status && echo -e "👉 Undo this operation with: \033[32mga $@\033[0m"
+  fi
+}
 
 # Undo commit, keep changes
 # https://stackoverflow.com/questions/15772134/can-i-delete-a-git-commit-but-keep-the-changes
@@ -251,6 +266,7 @@ _ggpath() {
 _ggurl() {
   echo "gitlab.com/"$(_ggpath)
 }
+# ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
 # Yadm
