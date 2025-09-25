@@ -21,6 +21,7 @@ kubectl_find() {
 }
 alias kff="kubectl_find"
 
+# show all resources on a namespace
 kubectl_ls() {
   local namespace="$1"
   for r in $(kubectl api-resources --namespaced=true -o name); do
@@ -193,6 +194,17 @@ alias gco="git checkout"
 alias gbs="git switch"
 alias gbls="git branch --all"
 
+# 🚧 ........................................................................ 🚧
+
+# Push an empty commit, with a "ci-trigger" comment, and then remove it
+alias gPFci="git fetch && git commit -m 'ci-trigger' --allow-empty && git push --no-verify && git reset --soft HEAD~ && git push -f --no-verify"
+
+# Note: `git fetch` is a sanity check to prevent the commit, if the remote repository is unavailable
+# TODO: add some checks to prevent running if there are pending commits to push
+# TODO: add some checks to prevent running on main/master
+
+# 🚧 ........................................................................ 🚧
+
 # Remove all untracked files
 alias gClean="git_gClean"
 git_gClean() {
@@ -208,14 +220,9 @@ git_glogs() {
 
 alias gNuke="git reset --hard && git clean -fdx"
 
-alias gI="_gI"
-_gI() {
+alias gI="git_gI"
+git_gI() {
   git init --initial-branch=$1
-}
-
-alias gPor="_gPor"
-_gPor() {
-  git push -u origin $1
 }
 
 # Undo add
@@ -232,40 +239,47 @@ git_gUntrack() {
   fi
 }
 
-# Undo commit, keep changes
+# Undo last commit, keep changes
 # https://stackoverflow.com/questions/15772134/can-i-delete-a-git-commit-but-keep-the-changes
 alias gUc="git reset HEAD^ && git status"
 
 # Push current branch to origin
 alias gPPor="git branch --show-current | xargs -I {} bash -c 'git push --set-upstream origin {}'"
 
+# 🚧 ........................................................................ 🚧
+#                         only working for gitlab!
+# 🚧 ........................................................................ 🚧
+
 # Open the repo page in the browser
-alias ggo="_ggo"
+alias ggo="git_ggo"
 
 # Project url (TODO only working for gitlab for now!)
-alias ggurl="_ggurl"
+alias ggurl="git_ggurl"
 
 # Project path
-alias ggpath="_ggpath"
+alias ggpath="git_ggpath"
 
 # Project name
-alias ggname="_ggname"
+alias ggname="git_ggname"
 
-_ggname() {
+git_ggname() {
   basename $(_ggpath)
 }
 
-_ggo() {
+git_ggo() {
   echo "https://"$(_ggurl) | xargs open
 }
 
-_ggpath() {
+git_ggpath() {
   echo $(cut -d '.' -f1 <<<$(cut -d ':' -f2 <<<$(git ls-remote --get-url)))
 }
 
-_ggurl() {
+git_ggurl() {
   echo "gitlab.com/"$(_ggpath)
 }
+
+# 🚧 ........................................................................ 🚧
+
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
