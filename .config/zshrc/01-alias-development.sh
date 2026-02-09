@@ -42,6 +42,9 @@ kubectl_kpbkconf() {
   chmod go-r ~/.kube/config
 }
 alias kpbkconf="kubectl_kpbkconf"
+
+alias kAf="kubectl apply -f"
+alias kDf="kubectl delete -f"
 # ------------------------------------------------------------------------------
 
 
