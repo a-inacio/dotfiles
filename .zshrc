@@ -10,6 +10,7 @@ bindkey -v
 
 export GOPATH=$HOME/go
 
+export PATH="$HOME/.local/bin:$PATH"
 export PATH=$HOME/.sbin:${PATH}
 export PATH=$GOPATH/bin:${PATH}
 export PATH=./node_modules/.bin:${PATH}
@@ -33,8 +34,10 @@ source $ZSH/oh-my-zsh.sh
 # Custom configs
 source ~/.config/zshrc/00-all.sh
 
-# Initialize completion
-compinit
+# Initialize Zsh completions
+autoload -Uz compinit && compinit
+# Initialize Bash completions
+autoload -U +X bashcompinit && bashcompinit
 
 export VISUAL=nvim
 export EDITOR=nvim
@@ -44,10 +47,10 @@ export LC_ALL=en_US.UTF-8
 
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source <(fzf --zsh)
+(( $+commands[fzf] )) && source <(fzf --zsh)
 
-eval $(thefuck --alias)
-eval "$(zoxide init zsh)"
+#eval $(thefuck --alias)
+#eval "$(zoxide init zsh)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -59,15 +62,20 @@ export PYTHON_HOST_PROG=`which python`
 
 export VIM_DOTFILES_DIR="$HOME/.config/vim"
 
-# sdkman claims needing to be added to the end 🥴
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
-
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/terragrunt terragrunt
+if (( $+commands[goenv] )); then
+  export GOENV_ROOT="$HOME/.goenv"
+  export PATH="$GOENV_ROOT/bin:$PATH"
+  eval "$(goenv init -)"
+fi
+
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+
+(( $+commands[terragrunt] )) && complete -o nospace -C /usr/local/bin/terragrunt terragrunt
