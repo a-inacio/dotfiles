@@ -256,6 +256,9 @@ alias gPPor="git branch --show-current | xargs -I {} bash -c 'git push --set-ups
 # Open the repo page in the browser
 alias ggo="git_ggo"
 
+# Open file in the respective git repo, accepts a range to highlight
+alias gopen="git_gopen"
+
 # Project url (TODO only working for gitlab for now!)
 alias ggurl="git_ggurl"
 
@@ -270,7 +273,13 @@ git_ggname() {
 }
 
 git_ggo() {
-  echo "https://"$(_ggurl) | xargs open
+  #echo "https://"$(_ggurl) | xargs open
+  url=$(git config --get remote.origin.url | sed "s/git@github.com:/https:\/\/github.com\//" | sed "s/\.git$//");
+  if command -v wslview &> /dev/null; then
+	  wslview "$url";
+  else
+	  open "$url";
+  fi
 }
 
 git_ggpath() {
@@ -279,6 +288,25 @@ git_ggpath() {
 
 git_ggurl() {
   echo "gitlab.com/"$(_ggpath)
+}
+
+git_gopen() {
+  local file="$1"
+  local lines="${2:-}"
+  local repo_url=$(git remote get-url origin | sed 's/\.git$//')
+  local branch=$(git rev-parse --abbrev-ref HEAD)
+  local abs_path=$(realpath "$file")
+  local repo_root=$(git rev-parse --show-toplevel)
+  local rel_path="${abs_path#$repo_root/}"
+  local url="${repo_url}/blob/${branch}/${rel_path}"
+  
+  [ -n "$lines" ] && url="${url}#L${lines}"
+  
+  if command -v wslview &> /dev/null; then
+    wslview "$url"
+  else
+    open "$url"
+  fi
 }
 
 # 🚧 ........................................................................ 🚧

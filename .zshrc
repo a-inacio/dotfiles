@@ -11,6 +11,10 @@ bindkey -v
 export GOPATH=$HOME/go
 
 export PATH="$HOME/.local/bin:$PATH"
+# ~/bin: default bin for tfswitch (terraform) and similar version managers that
+# fall back here when /usr/local/bin isn't writable. Kept on PATH so whatever
+# they drop here is picked up. .profile adds this for bash; zsh needs it here.
+export PATH="$HOME/bin:$PATH"
 export PATH=$HOME/.sbin:${PATH}
 export PATH=$GOPATH/bin:${PATH}
 export PATH=./node_modules/.bin:${PATH}
@@ -45,7 +49,7 @@ export EDITOR=nvim
 # Use english (https://unix.stackexchange.com/questions/87745/what-does-lc-all-c-do)
 export LC_ALL=en_US.UTF-8
 
-#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 (( $+commands[fzf] )) && source <(fzf --zsh)
 
