@@ -2,6 +2,7 @@ source ~/.config/zshrc/01-alias-core.sh
 source ~/.config/zshrc/01-alias-development.sh
 source ~/.config/zshrc/01-alias-tools.sh
 source ~/.config/zshrc/02-bindings.sh
+source ~/.config/zshrc/03-tools.sh
 
 __priv="$HOME/.config/zshrc/private"
 

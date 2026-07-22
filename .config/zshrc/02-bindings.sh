@@ -1,15 +1,5 @@
-# ------------------------------------------------------------------------------
-# ⚠️  Option arrow keys will collide with Tmux current bindings
-# ------------------------------------------------------------------------------
-# ⌥ →
-bindkey '^[^[[D' backward-word
-# ⌥ ←
-bindkey '^[^[[C' forward-word
-# ⌥ ↑
-bindkey '^[^[[A' vi-cmd-mode 
-# ⌥ ↓ 
-bindkey '^[^[[B' vi-put-before
-
+## Enable Vi mode
+bindkey -v
 
 # ------------------------------------------------------------------------------
 # Vi mode tweaks
