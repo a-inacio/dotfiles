@@ -1,0 +1,4 @@
+# Local-only shell config (machine-private / work) — never tracked in the public
+# dotfiles. Holds loose NN-*.sh snippets + cloned private repos (each sourced via
+# its *.plugin.zsh entrypoint). Populated locally (Phase 2: a private git-repo external).
+.config/zshrc/private/
