@@ -10,6 +10,9 @@ bindkey -v
 
 export GOPATH=$HOME/go
 
+# Keep PATH entries unique so re-sourcing this file doesn't stack duplicates.
+typeset -U path PATH
+
 export PATH="$HOME/.local/bin:$PATH"
 # ~/bin: default bin for tfswitch (terraform) and similar version managers that
 # fall back here when /usr/local/bin isn't writable. Kept on PATH so whatever
@@ -28,8 +31,6 @@ else
   ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
 
-#plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -38,9 +39,8 @@ source $ZSH/oh-my-zsh.sh
 # Custom configs
 source ~/.config/zshrc/00-all.sh
 
-# Initialize Zsh completions
-autoload -Uz compinit && compinit
-# Initialize Bash completions
+# oh-my-zsh already ran compinit (cached) above; only bashcompinit is still needed
+# here — for bash-style `complete -C` completions (e.g. terragrunt).
 autoload -U +X bashcompinit && bashcompinit
 
 export VISUAL=nvim
@@ -53,16 +53,13 @@ export LC_ALL=en_US.UTF-8
 
 (( $+commands[fzf] )) && source <(fzf --zsh)
 
-#eval $(thefuck --alias)
-#eval "$(zoxide init zsh)"
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # SpaceVim - python support for neovim
-export PYTHON3_HOST_PROG=`which python3`
-export PYTHON_HOST_PROG=`which python`
+export PYTHON3_HOST_PROG=$(command -v python3)
+export PYTHON_HOST_PROG=$(command -v python)
 
 export VIM_DOTFILES_DIR="$HOME/.config/vim"
 
