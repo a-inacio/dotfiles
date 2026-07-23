@@ -1,0 +1,24 @@
+# --- antidote plugin manifest ---
+# Regenerate the static ~/.config/zsh/.zsh_plugins.zsh automatically on change
+# (handled by .zshrc). Pin a plugin with `pin:<sha>` when you want to lock it.
+
+# compinit at the right time (after all fpath changes)
+mattmc3/ez-compinit
+
+# keep oh-my-zsh's sane defaults (history sizes, keybindings, completion styles)
+# WITHOUT the full framework: use-omz first, then load only the lib.
+getantidote/use-omz
+ohmyzsh/ohmyzsh path:lib
+
+# prompt: powerlevel10k, then the catppuccin overlay (MUST come after p10k)
+romkatv/powerlevel10k
+tolkonepiu/catppuccin-powerlevel10k-themes
+
+# extra completions (added to fpath before compinit runs)
+zsh-users/zsh-completions kind:fpath path:src
+
+# fish-like autosuggestions
+zsh-users/zsh-autosuggestions
+
+# syntax highlighting — MUST be last
+zsh-users/zsh-syntax-highlighting

@@ -1,10 +1,12 @@
-source ~/.config/zshrc/01-alias-core.sh
-source ~/.config/zshrc/01-alias-development.sh
-source ~/.config/zshrc/01-alias-tools.sh
-source ~/.config/zshrc/02-bindings.sh
-source ~/.config/zshrc/03-tools.sh
+# Location-independent: source siblings relative to THIS file's dir (= $ZDOTDIR).
+__zdir=${0:A:h}
+source $__zdir/01-alias-core.sh
+source $__zdir/01-alias-development.sh
+source $__zdir/01-alias-tools.sh
+source $__zdir/02-bindings.sh
+source $__zdir/03-tools.sh
 
-__priv="$HOME/.config/zshrc/private"
+__priv="$__zdir/private"
 
 if [ -d "$__priv" ]; then
   # 1) Loose machine-local snippets: private/NN-*.sh (top level; NN- prefix = order).
