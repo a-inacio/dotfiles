@@ -1,0 +1,6 @@
+# Repo files that live in the SOURCE only — never applied to $HOME.
+README.md
+install.sh
+LICENSE
+
+# (macOS-only alternates + the yadm bootstrap are handled in later migration stages)

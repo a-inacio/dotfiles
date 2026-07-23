@@ -1,0 +1,29 @@
+# External dependencies pulled in by chezmoi (not vendored into the repo).
+# Templated: the private overlay is included ONLY when `privateRepo` is set in the
+# local chezmoi config (~/.config/chezmoi/chezmoi.toml [data]) — empty on a home machine.
+
+# --- ranger third-party (was git submodules; now pinned archives + checksum) ---
+[".config/ranger/themes/dracula"]
+    type = "archive"
+    url = "https://github.com/dracula/ranger/archive/8dba1c0dad031dd9c7d844c01bd2bcf03aea24fd.tar.gz"
+    stripComponents = 1
+    refreshPeriod = "0"
+    [".config/ranger/themes/dracula".checksum]
+        sha256 = "905cbb8f08c5086918fe97a00b3ba2d763ee0e61002e83a7a99bc31009a4208d"
+
+[".config/ranger/plugins/ranger_devicons"]
+    type = "archive"
+    url = "https://github.com/alexanderjeurissen/ranger_devicons/archive/df583d66ed093849248c2cf1631bce15d01b30e1.tar.gz"
+    stripComponents = 1
+    refreshPeriod = "0"
+    [".config/ranger/plugins/ranger_devicons".checksum]
+        sha256 = "97d7e4d0d5324a872f08332ee4339dc188afed41cf938a8920425953918ca505"
+
+# --- private (NDA) overlay — only when configured locally (never a leaked URL here) ---
+{{- $priv := (index . "privateRepo") }}
+{{- if $priv }}
+[".config/dotfiles-private"]
+    type = "git-repo"
+    url = {{ $priv | quote }}
+    refreshPeriod = "168h"
+{{- end }}
