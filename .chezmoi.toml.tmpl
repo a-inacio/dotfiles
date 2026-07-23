@@ -1,0 +1,7 @@
+# chezmoi config template — chezmoi generates ~/.config/chezmoi/chezmoi.toml from this
+# during `chezmoi init` (right after cloning the source). Repo-versioned; add settings here.
+[data]
+    # Private overlay repo URL: taken from $DOTFILES_PRIVATE_REPO on first init (the private
+    # install.sh exports it), else the existing value (persists across re-inits), else empty
+    # (personal/home machine → no private overlay). Never prompts, so `curl | sh` stays safe.
+    privateRepo = {{ or (env "DOTFILES_PRIVATE_REPO") (index . "privateRepo") "" | quote }}

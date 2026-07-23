@@ -4,8 +4,8 @@
 #
 #  Personal/home machine:
 #    sh -c "$(curl -fsSL https://raw.githubusercontent.com/a-inacio/dotfiles/main/install.sh)"
-#  Work machine: run dotfiles-private/install.sh instead — it sets the private
-#    overlay URL into the local chezmoi config, then calls THIS script.
+#  Work machine: run dotfiles-private/install.sh instead — it exports the private
+#    overlay URL ($DOTFILES_PRIVATE_REPO), then calls THIS script.
 #
 #  Lives at the repo ROOT and is .chezmoiignore'd, so it never lands in $HOME.
 #  Idempotent + non-interactive. Supports Debian/Ubuntu (apt) and macOS (brew).
@@ -14,7 +14,6 @@ set -eu
 
 DOTFILES="a-inacio/dotfiles"          # public source repo (chezmoi expands to https)
 NVIM_STABLE="0.12.4"                   # installed if nvim is missing or < 0.11.2
-CHEZMOI_CFG="${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi/chezmoi.toml"
 
 info() { printf '\033[1;34m::\033[0m %s\n' "$1"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$1" >&2; }
@@ -66,25 +65,10 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
   git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 fi
 
-# --- 4. local-only chezmoi config (create ONCE; never overwrite) -------------
-# Default = no private overlay (home machine). A work machine's private install.sh
-# writes privateRepo here BEFORE calling this script; the guard below preserves it.
-if [ ! -f "$CHEZMOI_CFG" ]; then
-  info "creating default chezmoi config (no private overlay)"
-  mkdir -p "$(dirname "$CHEZMOI_CFG")"
-  cat > "$CHEZMOI_CFG" <<'EOF'
-# Local-only chezmoi config (NEVER committed). Machine-specific.
-[data]
-    # Private overlay repo URL. EMPTY = personal/home machine (no private overlay).
-    # A work machine's dotfiles-private/install.sh sets this before bootstrap.
-    privateRepo = ""
-EOF
-  chmod 600 "$CHEZMOI_CFG"
-else
-  info "chezmoi config already present — keeping it"
-fi
-
-# --- 5. clone the source + apply everything ----------------------------------
+# --- 4. clone source + apply -------------------------------------------------
+# `chezmoi init` generates ~/.config/chezmoi/chezmoi.toml from the repo's
+# .chezmoi.toml.tmpl (privateRepo = $DOTFILES_PRIVATE_REPO if the private layer
+# exported it, else the existing value, else empty), then applies + fetches externals.
 info "applying dotfiles (chezmoi init --apply $DOTFILES)"
 "$CHEZMOI" init --apply "$DOTFILES"
 
