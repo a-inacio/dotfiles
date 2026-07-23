@@ -36,10 +36,13 @@ fi
 # off). `p10k reload` re-reads the POWERLEVEL9K_* vars without re-sourcing the theme, so
 # the colours stay and only this changes. Use 'same-dir' instead of 'always' to keep the
 # prompt full when the directory changed.
-if (( $+functions[p10k] )); then
-  typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always   # collapse past prompts to a compact line
-  p10k reload
-fi
+# --- transient prompt disabled for now (experimenting with plain lean) —
+#     uncomment to re-enable (use 'same-dir' instead of 'always' to keep the
+#     prompt full after a `cd`):
+# if (( $+functions[p10k] )); then
+#   typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always   # collapse past prompts to a compact line
+#   p10k reload
+# fi
 
 # Custom config — aliases, keybindings, tools, private extras (after plugins).
 source $ZDOTDIR/00-all.sh
