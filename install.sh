@@ -62,13 +62,8 @@ else
   info "neovim present + >= 0.11.2"
 fi
 
-# --- 3b. tmux plugin manager (tpm) — tmux can't self-bootstrap it ------------
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-  info "installing tmux plugin manager (tpm)"
-  git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-fi
-
 # --- 4. clone source + apply -------------------------------------------------
+# (tmux self-bootstraps tpm + its plugins on first launch — see .tmux.conf)
 # `chezmoi init` generates ~/.config/chezmoi/chezmoi.toml from the repo's
 # .chezmoi.toml.tmpl (privateRepo = $DOTFILES_PRIVATE_REPO if the private layer
 # exported it, else the existing value, else empty), then applies + fetches externals.
