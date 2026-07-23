@@ -14,7 +14,7 @@ fi
 source $ZDOTDIR/00-env.sh
 
 # Catppuccin p10k flavour/theme — set BEFORE the theme plugin loads.
-zstyle ':catppuccin:p10k' 'theme'   'rainbow'
+zstyle ':catppuccin:p10k' 'theme'   'lean'
 zstyle ':catppuccin:p10k' 'flavour' 'mocha'
 
 # --- antidote: static/performance plugin load (https://antidote.sh/install) ---
@@ -38,6 +38,14 @@ fi
 # prompt full when the directory changed.
 if (( $+functions[p10k] )); then
   typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always   # collapse past prompts to a compact line
+  # Corner frame around the two-line prompt (the lean style ships none) — surface1 grey.
+  # Left+right corners on top (╭─ … ─╮), prompt char on the bottom line (╰─ … ─╯).
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%F{#45475a}╭─'
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%F{#45475a}├─'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{#45475a}╰─'
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX='%F{#45475a}─╮'
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX='%F{#45475a}─┤'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX='%F{#45475a}─╯'
   p10k reload
 fi
 
