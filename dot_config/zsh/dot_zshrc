@@ -17,20 +17,20 @@ source $ZDOTDIR/00-env.sh
 zstyle ':catppuccin:p10k' 'theme'   'rainbow'
 zstyle ':catppuccin:p10k' 'flavour' 'mocha'
 
-# --- antidote: static/performance load (https://antidote.sh/install) ---
-# Bootstrap-clone antidote on a fresh machine.
-[[ -d $ZDOTDIR/.antidote ]] || \
-  git clone --depth=1 https://github.com/mattmc3/antidote.git $ZDOTDIR/.antidote
-
-zsh_plugins=$ZDOTDIR/.zsh_plugins
-[[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-fpath=($ZDOTDIR/.antidote/functions $fpath)
-autoload -Uz antidote
-# Regenerate the static bundle only when the manifest (.txt) is newer.
-if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
-  antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+# --- antidote: static/performance plugin load (https://antidote.sh/install) ---
+# The antidote TOOL is installed by the setup script (install.sh); here we only
+# load it + self-bootstrap the PLUGINS (regenerate the static bundle when the
+# manifest changes). Guarded so a shell on an un-provisioned machine still loads.
+if [[ -d $ZDOTDIR/.antidote ]]; then
+  zsh_plugins=$ZDOTDIR/.zsh_plugins
+  [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
+  fpath=($ZDOTDIR/.antidote/functions $fpath)
+  autoload -Uz antidote
+  if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
+    antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+  fi
+  source ${zsh_plugins}.zsh
 fi
-source ${zsh_plugins}.zsh
 
 # Custom config — aliases, keybindings, tools, private extras (after plugins).
 source $ZDOTDIR/00-all.sh

@@ -76,4 +76,12 @@ fi
 info "applying dotfiles (chezmoi init --apply $DOTFILES)"
 "$CHEZMOI" init --apply "$DOTFILES"
 
-info "done — open a new terminal. (nvim: plugins install on first launch; tmux: prefix + I)"
+# --- 5. antidote (zsh plugin-manager tool) — ZDOTDIR now exists (chezmoi applied) ---
+#         .zshrc then self-bootstraps the PLUGINS (static bundle) on first shell.
+ZDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+if [ ! -d "$ZDIR/.antidote" ]; then
+  info "installing antidote -> $ZDIR/.antidote"
+  git clone --depth=1 https://github.com/mattmc3/antidote.git "$ZDIR/.antidote"
+fi
+
+info "done — open a new terminal. Plugins self-install on first use (zsh: antidote, nvim: lazy, tmux: tpm)."
