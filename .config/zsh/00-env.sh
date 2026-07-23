@@ -26,5 +26,3 @@ export LC_ALL=en_US.UTF-8
 # python provider for neovim
 export PYTHON3_HOST_PROG=$(command -v python3)
 export PYTHON_HOST_PROG=$(command -v python)
-
-export VIM_DOTFILES_DIR="$HOME/.config/vim"

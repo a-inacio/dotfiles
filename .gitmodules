@@ -1,7 +1,3 @@
-[submodule ".config/vim"]
-	path = .config/vim
-	url = https://github.com/a-inacio/dotfiles-vim
-	branch = main
 [submodule ".config/ranger/themes/dracula"]
 	path = .config/ranger/themes/dracula
 	url = https://github.com/dracula/ranger
