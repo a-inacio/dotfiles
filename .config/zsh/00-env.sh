@@ -23,7 +23,7 @@ export EDITOR=nvim
 # Use english (https://unix.stackexchange.com/questions/87745/what-does-lc-all-c-do)
 export LC_ALL=en_US.UTF-8
 
-# SpaceVim - python support for neovim
+# python provider for neovim
 export PYTHON3_HOST_PROG=$(command -v python3)
 export PYTHON_HOST_PROG=$(command -v python)
 

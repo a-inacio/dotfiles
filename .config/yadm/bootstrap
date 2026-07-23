@@ -48,22 +48,16 @@ command -v yarn >/dev/null 2>&1 || {
   npm install yarn -g
 }
 
-# Setup gotags (also required for SpaceVim's Golang layer)
+# Setup gotags
 go install github.com/jstemmer/gotags@latest
 
 # Cobra generator
 go install github.com/spf13/cobra/cobra@latest
 
-# SpaceVim HTML LSP requirement
-npm install --global vscode-html-languageserver-bin
-
 pip3 install --upgrade pip
 python3 -m pip install --upgrade pynvim
 
 npm install -g neovim
-
-# Setup SpaceVim
-curl -sLf https://spacevim.org/install.sh | bash
 
 # Setup tmux's plugin manager (tpm)
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
