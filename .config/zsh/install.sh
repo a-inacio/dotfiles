@@ -75,4 +75,23 @@ else
   warn "antidote will self-bootstrap plugins on your first zsh launch anyway."
 fi
 
+# --- 4. private overlay (optional) -------------------------------------------
+# Clone the machine/work-private overlay IF its URL is configured locally. The URL
+# lives ONLY in ~/.config/dotfiles/private.env (git-ignored) — never in this repo,
+# so a non-work machine simply skips this step.
+PRIVATE_ENV="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/private.env"
+PRIVATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles-private"
+[ -f "$PRIVATE_ENV" ] && . "$PRIVATE_ENV"
+if [ -n "${DOTFILES_PRIVATE_URL:-}" ]; then
+  if [ -d "$PRIVATE_DIR/.git" ]; then
+    info "private overlay present — updating (best effort)"
+    git -C "$PRIVATE_DIR" pull --ff-only --quiet 2>/dev/null || warn "private overlay update skipped"
+  else
+    info "cloning private overlay -> $PRIVATE_DIR"
+    git clone "$DOTFILES_PRIVATE_URL" "$PRIVATE_DIR"
+  fi
+else
+  info "no private overlay configured (set ~/.config/dotfiles/private.env to enable) — skipping"
+fi
+
 info "zsh config dependencies ready — start a new terminal or run: exec zsh"
