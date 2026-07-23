@@ -314,30 +314,32 @@ git_gopen() {
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# Yadm
+# Chezmoi (dotfiles) — source is SEPARATE from $HOME (~/.local/share/chezmoi).
+# Flow: edit a config in $HOME -> `cma`/`cmaa` to CAPTURE it into the source
+# (BEFORE any apply, which is source->$HOME and would revert an uncaptured edit)
+# -> `cmc`/`cmp` (git acts on the SOURCE repo).  `cmsave` does capture+commit+push.
 # ------------------------------------------------------------------------------
-alias ylias='alias | grep "='\''yadm"'
-alias yboot="yadm bootstrap"
-alias yeboot='$EDITOR ~/.config/yadm/bootstrap'
-alias yebrew='$EDITOR ~/.Brewfile'
-alias ys="yadm status"
-alias ya="yadm add"
-alias yaa="yadm add -u && yadm status"
-alias yp="yadm pull --rebase"
-alias ypp="yadm pull --rebase --recurse-submodules"
-alias yc="yadm commit"
-alias yP="yadm pull --rebase && yadm push"
-alias yd="yadm diff"
-alias yds="yadm diff --staged"
-alias ySu="yadm submodule update --remote --merge"
-alias ySi="yadm submodule update --init --recursive"
-alias ySa="yadm submodule add"
+alias cmlias='alias | grep "^cm"'
+alias cms="chezmoi status"                       # what differs between source and $HOME
+alias cmd="chezmoi diff"                          # diff: source -> $HOME
+alias cme="chezmoi edit --apply"                  # edit a file's SOURCE + apply        (path)
+alias cma="chezmoi add"                           # capture a $HOME file INTO the source (path)
+alias cmaa="chezmoi re-add && chezmoi git -- status"   # capture ALL changed managed files
+alias cmap="chezmoi apply"                        # apply source -> $HOME
+alias cmR="chezmoi apply --refresh-externals"     # refresh externals (ranger/private)
+alias cmup="chezmoi update"                        # git pull source + apply
+alias cmcd="chezmoi cd"                            # subshell inside the source repo
+alias cmg="chezmoi git --"                         # run git in the source (e.g. cmg log)
+alias cmc="chezmoi git -- commit"
+alias cmp="chezmoi git -- push"
+alias cmP="chezmoi git -- pull --rebase && chezmoi git -- push"
 
-# Undo add
-alias yUa="yadm restore --stage . && yadm status"
+# Undo (in the source repo)
+alias cmUa="chezmoi git -- restore --staged . && chezmoi git -- status"   # unstage
+alias cmUc="chezmoi git -- reset HEAD^ && chezmoi git -- status"          # uncommit
 
-# Undo commit
-alias yUc="yadm reset HEAD^ && yadm status"
+# One-shot "save my config changes": capture $HOME edits -> commit -> push
+cmsave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
 
 # ------------------------------------------------------------------------------
 # Productivity
