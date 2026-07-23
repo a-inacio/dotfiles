@@ -12,6 +12,9 @@
 # =============================================================================
 set -eu
 
+# Start from a known-good directory — a deleted/inaccessible CWD breaks chezmoi (getwd).
+cd "$HOME" 2>/dev/null || cd /
+
 DOTFILES="a-inacio/dotfiles"          # public source repo (chezmoi expands to https)
 NVIM_STABLE="0.12.4"                   # installed if nvim is missing or < 0.11.2
 
