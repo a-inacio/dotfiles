@@ -6,18 +6,12 @@ source $__zdir/01-alias-tools.sh
 source $__zdir/02-bindings.sh
 source $__zdir/03-tools.sh
 
-__priv="$__zdir/private"
-
-if [ -d "$__priv" ]; then
-  # 1) Loose machine-local snippets: private/NN-*.sh (top level; NN- prefix = order).
-  #    (N) = nullglob, so an empty dir yields no entries instead of a literal glob.
-  for script in "$__priv"/*.sh(N); do
-    [ -f "$script" ] && source "$script"
-  done
-
-  # 2) Cloned private repos: private/<repo>/*.plugin.zsh (oh-my-zsh plugin convention).
-  #    Only the entrypoint is sourced; the repo owns sourcing its own nested files.
-  for plugin in "$__priv"/*/*.plugin.zsh(N); do
-    [ -f "$plugin" ] && source "$plugin"
+# Private overlay — the NDA repo cloned to ~/.config/dotfiles-private (if present).
+# Sourced LAST so its fragments can override/extend the public config; a no-op when
+# the clone is absent (non-work machines). (N) = nullglob.
+__dpriv="$HOME/.config/dotfiles-private/zsh"
+if [ -d "$__dpriv" ]; then
+  for f in "$__dpriv"/*.sh(N); do
+    [ -f "$f" ] && source "$f"
   done
 fi
