@@ -60,6 +60,12 @@ else
   info "neovim present + >= 0.11.2"
 fi
 
+# --- 3b. tmux plugin manager (tpm) — tmux can't self-bootstrap it ------------
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  info "installing tmux plugin manager (tpm)"
+  git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
+
 # --- 4. local-only chezmoi config (create ONCE; never overwrite) -------------
 # Default = no private overlay (home machine). A work machine's private install.sh
 # writes privateRepo here BEFORE calling this script; the guard below preserves it.
