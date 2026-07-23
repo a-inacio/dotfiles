@@ -1,8 +1,10 @@
-alias sz="source ~/.config/zshrc/00-all.sh"
-alias ez="vim ~/.config/zshrc/00-all.sh"
+# sz/ez  → reload/edit the fragment aggregator ($ZDOTDIR/00-all.sh)
+# szz/ezz → reload/edit the main rc          ($ZDOTDIR/.zshrc)
+alias sz='source $ZDOTDIR/00-all.sh'
+alias ez='vim $ZDOTDIR/00-all.sh'
 
-alias szz="source ~/.zshrc"
-alias ezz="vim ~/.zshrc"
+alias szz='source $ZDOTDIR/.zshrc'
+alias ezz='vim $ZDOTDIR/.zshrc'
 
 alias ll="ls -l"
 alias la="ls -a"
