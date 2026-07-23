@@ -1,10 +1,10 @@
 # sz/ez  → reload/edit the fragment aggregator ($ZDOTDIR/00-all.sh)
 # szz/ezz → reload/edit the main rc          ($ZDOTDIR/.zshrc)
 alias sz='source $ZDOTDIR/00-all.sh'
-alias ez='vim $ZDOTDIR/00-all.sh'
+alias ez='$EDITOR $ZDOTDIR/00-all.sh'
 
 alias szz='source $ZDOTDIR/.zshrc'
-alias ezz='vim $ZDOTDIR/.zshrc'
+alias ezz='$EDITOR $ZDOTDIR/.zshrc'
 
 alias ll="ls -l"
 alias la="ls -a"
@@ -49,7 +49,7 @@ alias t="tmux"
 alias ta="tmux a"
 alias tls="tmux ls"
 alias tsz="tmux source ~/.tmux.conf"
-alias tez="vim ~/.tmux.conf"
+alias tez='$EDITOR ~/.tmux.conf'
 
 function tk(){
   tmux list-sessions | grep -v attached | awk 'BEGIN{FS=":"}{print $1}' | xargs -n 1 tmux kill-session -t

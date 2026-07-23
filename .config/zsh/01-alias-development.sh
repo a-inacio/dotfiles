@@ -157,7 +157,7 @@ export PULUMI_K8S_SUPPRESS_DEPRECATION_WARNINGS=true
 # SSH / networking
 # ------------------------------------------------------------------------------
 alias lsh="grep -e \"^Host\" ~/.ssh/config | awk '{print \$2}'"
-alias esh="vim ~/.ssh/config"
+alias esh='$EDITOR ~/.ssh/config'
 
 alias ips='ifconfig | awk '"'"'/inet / {print $2}'"'"
 alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
@@ -318,8 +318,8 @@ git_gopen() {
 # ------------------------------------------------------------------------------
 alias ylias='alias | grep "='\''yadm"'
 alias yboot="yadm bootstrap"
-alias yeboot="vim ~/.config/yadm/bootstrap"
-alias yebrew="vim ~/.Brewfile"
+alias yeboot='$EDITOR ~/.config/yadm/bootstrap'
+alias yebrew='$EDITOR ~/.Brewfile'
 alias ys="yadm status"
 alias ya="yadm add"
 alias yaa="yadm add -u && yadm status"
