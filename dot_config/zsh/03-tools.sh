@@ -1,5 +1,20 @@
-# Tool / version-manager init + completions. Sourced (via 00-all.sh) AFTER
-# oh-my-zsh has run compinit, so completion registration works.
+# Tool / version-manager init + completions. Sourced (via 00-all.sh) AFTER the
+# antidote plugin block, so every completion fpath change is already in place.
+
+# Completion system: run compinit NOW (after all plugin fpath changes) so the
+# fzf/work/terragrunt completion scripts below — which call `compdef`/`complete`
+# immediately — actually register. ez-compinit (antidote) DEFERS compinit to the
+# first prompt via precmd hooks; left deferred it also runs a SECOND time AFTER
+# this file and rebuilds _comps from fpath, silently wiping the runtime `compdef`s
+# we add here (that regressed `work` completion + broke Tab → files, leaving only
+# autosuggest's → accept). So run compinit now, then cancel the deferred precmd
+# hooks (its wrapper is meant to, but the removal doesn't stick). Falls back to a
+# plain compinit when ez-compinit isn't loaded.
+(( ${+functions[compinit]} )) || autoload -Uz compinit
+compinit
+autoload -Uz add-zsh-hook
+add-zsh-hook -d precmd run-compinit 2>/dev/null                    # ez-compinit deferred compinit
+add-zsh-hook -d precmd ensure-compinit-during-precmd 2>/dev/null   # ez-compinit safety re-run
 
 # bash-style completions — needed by `complete -C` (e.g. terragrunt below).
 autoload -U +X bashcompinit && bashcompinit
