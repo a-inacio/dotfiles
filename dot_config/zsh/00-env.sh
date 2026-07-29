@@ -20,6 +20,15 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export VISUAL=nvim
 export EDITOR=nvim
 
+# History — pin HISTFILE explicitly. The oh-my-zsh lib only sets it when empty
+# (`[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"`), so without this the
+# location depended on plugin load-order — which split history across
+# ~/.zsh_history and $ZDOTDIR/.zsh_history during the ZDOTDIR migration. Set it
+# here (sourced before the omz lib) so it's deterministic and under $ZDOTDIR for
+# a clean $HOME. HISTSIZE/SAVEHIST are raised after the omz lib in .zshrc (the
+# lib hard-sets them, so they can't stick here); omz keeps the hist setopts.
+export HISTFILE="$ZDOTDIR/.zsh_history"
+
 # Use english (https://unix.stackexchange.com/questions/87745/what-does-lc-all-c-do)
 export LC_ALL=en_US.UTF-8
 

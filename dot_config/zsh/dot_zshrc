@@ -32,6 +32,12 @@ if [[ -d $ZDOTDIR/.antidote ]]; then
   source ${zsh_plugins}.zsh
 fi
 
+# History size — raise above the omz lib defaults (it hard-sets HISTSIZE=50000 /
+# SAVEHIST=10000, so this MUST come after the antidote block to stick). HISTFILE
+# is pinned in 00-env.sh. Keep in-memory (HISTSIZE) >= on-disk (SAVEHIST).
+HISTSIZE=100000
+SAVEHIST=100000
+
 # p10k tweaks — override the catppuccin theme's baked defaults (it hard-sets transient
 # off). `p10k reload` re-reads the POWERLEVEL9K_* vars without re-sourcing the theme, so
 # the colours stay and only this changes. Use 'same-dir' instead of 'always' to keep the
