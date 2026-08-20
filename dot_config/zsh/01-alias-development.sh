@@ -322,11 +322,11 @@ git_gopen() {
 # source->$HOME and would revert an uncaptured edit) -> `cmc` then `cmP`.
 # `cmsave` does capture+stage+commit+push in one shot.
 # ------------------------------------------------------------------------------
-cmlias() { alias | grep "^cm"; print -l ${(k)functions} | grep "^cm" }   # list cm aliases + functions
+alias cmlias='alias | grep "^cm"'                 # list the cm* aliases
 alias cms="chezmoi status"                        # what differs between source and $HOME
 alias cmd="chezmoi diff"                           # diff: source -> $HOME
 alias cme="chezmoi edit --apply"                   # edit a file's SOURCE + apply         (path)
-cma()  { chezmoi add "$@" && chezmoi git -- add -A; }   # capture a $HOME file into source + stage (path)
+alias cma="chezmoi_cma"                            # capture a $HOME file into source + stage (path)
 alias cmaa="chezmoi re-add && chezmoi git -- add -A && chezmoi git -- status"   # capture ALL + stage + status
 alias cmap="chezmoi apply"                         # apply source -> $HOME
 alias cmRx="chezmoi apply --refresh-externals"     # apply + refresh eXternals (ranger/private)
@@ -342,7 +342,11 @@ alias cmUa="chezmoi git -- restore --staged . && chezmoi git -- status"   # unst
 alias cmUc="chezmoi git -- reset HEAD^ && chezmoi git -- status"          # uncommit
 
 # One-shot "save my config changes": capture $HOME edits -> commit -> push
-cmsave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
+alias cmsave="chezmoi_cmsave"
+
+# Functions backing the cm* aliases (tool_-prefixed, per the git_* convention)
+chezmoi_cma()    { chezmoi add "$@" && chezmoi git -- add -A; }
+chezmoi_cmsave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
 
 # ------------------------------------------------------------------------------
 # Productivity
