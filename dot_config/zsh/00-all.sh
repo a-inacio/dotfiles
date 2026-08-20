@@ -9,7 +9,7 @@ source $__zdir/03-tools.sh
 # Private overlay — the NDA repo cloned to ~/.config/dotfiles-private (if present).
 # Sourced LAST so its fragments can override/extend the public config; a no-op when
 # the clone is absent (non-work machines). (N) = nullglob.
-__dpriv="$HOME/.config/dotfiles-private/zsh"
+__dpriv="${__zdir:h}/dotfiles-private/zsh"   # sibling of $ZDOTDIR (config dir), not a hardcoded $HOME/.config
 if [ -d "$__dpriv" ]; then
   for f in "$__dpriv"/*.sh(N); do
     [ -f "$f" ] && source "$f"

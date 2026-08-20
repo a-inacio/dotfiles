@@ -333,7 +333,7 @@ alias cmap="chezmoi apply"                          # apply source -> $HOME (ext
 alias cmcd="chezmoi cd"                             # subshell inside the source repo
 alias cmg="chezmoi git --"                          # run git in the source (e.g. cmg log)
 alias cmc="chezmoi git -- commit"                  # commit the SOURCE repo           (mirrors gc)
-alias cmp="chezmoi update"                          # pull latest from remote + apply  (mirrors gp)
+alias cmp="chezmoi_cmp"                              # pull latest: public source (+apply) + private overlay  (mirrors gp)
 alias cmP="chezmoi git -- pull --rebase && chezmoi git -- push"   # push, pull-first  (mirrors gP)
 
 # Undo (in the source repo)
@@ -346,6 +346,16 @@ alias cmSave="chezmoi_cmSave"
 # Functions backing the cm* aliases (tool_-prefixed, per the git_* convention)
 chezmoi_cma()    { chezmoi add "$@" && chezmoi git -- add -A; }
 chezmoi_cmSave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
+chezmoi_cmp() {   # pull latest: public source (+apply), then the private overlay
+  local priv="${ZDOTDIR:h}/dotfiles-private"
+  # Halt rather than pull the private overlay on top of uncommitted work.
+  if [[ -d "$priv/.git" && -n "$(git -C "$priv" status --porcelain)" ]]; then
+    print -u2 "cmp: private overlay has uncommitted changes ($priv) — halting; commit/push there first."
+    return 1
+  fi
+  chezmoi update || return                                          # public: pull --rebase source + apply
+  [[ -d "$priv/.git" ]] && git -C "$priv" pull --rebase --autostash # private: pull latest
+}
 
 # ------------------------------------------------------------------------------
 # Productivity
