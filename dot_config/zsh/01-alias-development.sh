@@ -315,24 +315,27 @@ git_gopen() {
 
 # ------------------------------------------------------------------------------
 # Chezmoi (dotfiles) — source is SEPARATE from $HOME (~/.local/share/chezmoi).
-# Flow: edit a config in $HOME -> `cma`/`cmaa` to CAPTURE it into the source
-# (BEFORE any apply, which is source->$HOME and would revert an uncaptured edit)
-# -> `cmc`/`cmp` (git acts on the SOURCE repo).  `cmsave` does capture+commit+push.
+# The git-on-source verbs MIRROR the g* aliases: cmc=commit (gc), cmp=pull (gp),
+# cmP=push (gP), cmUa/cmUc=undo. The chezmoi-native verbs keep chezmoi semantics.
+# Flow: edit a config in $HOME -> `cma`/`cmaa` to CAPTURE it into the source (they
+# also git-STAGE it, so it's ready to commit; capture BEFORE any apply, which is
+# source->$HOME and would revert an uncaptured edit) -> `cmc` then `cmP`.
+# `cmsave` does capture+stage+commit+push in one shot.
 # ------------------------------------------------------------------------------
-alias cmlias='alias | grep "^cm"'
-alias cms="chezmoi status"                       # what differs between source and $HOME
-alias cmd="chezmoi diff"                          # diff: source -> $HOME
-alias cme="chezmoi edit --apply"                  # edit a file's SOURCE + apply        (path)
-alias cma="chezmoi add"                           # capture a $HOME file INTO the source (path)
-alias cmaa="chezmoi re-add && chezmoi git -- status"   # capture ALL changed managed files
-alias cmap="chezmoi apply"                        # apply source -> $HOME
-alias cmR="chezmoi apply --refresh-externals"     # refresh externals (ranger/private)
-alias cmup="chezmoi update"                        # git pull source + apply
-alias cmcd="chezmoi cd"                            # subshell inside the source repo
-alias cmg="chezmoi git --"                         # run git in the source (e.g. cmg log)
-alias cmc="chezmoi git -- commit"
-alias cmp="chezmoi git -- push"
-alias cmP="chezmoi git -- pull --rebase && chezmoi git -- push"
+cmlias() { alias | grep "^cm"; print -l ${(k)functions} | grep "^cm" }   # list cm aliases + functions
+alias cms="chezmoi status"                        # what differs between source and $HOME
+alias cmd="chezmoi diff"                           # diff: source -> $HOME
+alias cme="chezmoi edit --apply"                   # edit a file's SOURCE + apply         (path)
+cma()  { chezmoi add "$@" && chezmoi git -- add -A; }   # capture a $HOME file into source + stage (path)
+alias cmaa="chezmoi re-add && chezmoi git -- add -A && chezmoi git -- status"   # capture ALL + stage + status
+alias cmap="chezmoi apply"                         # apply source -> $HOME
+alias cmRx="chezmoi apply --refresh-externals"     # apply + refresh eXternals (ranger/private)
+alias cmup="chezmoi update"                         # git pull source + apply
+alias cmcd="chezmoi cd"                             # subshell inside the source repo
+alias cmg="chezmoi git --"                          # run git in the source (e.g. cmg log)
+alias cmc="chezmoi git -- commit"                  # commit the SOURCE repo           (mirrors gc)
+alias cmp="chezmoi git -- pull --rebase"           # pull the SOURCE repo             (mirrors gp)
+alias cmP="chezmoi git -- pull --rebase && chezmoi git -- push"   # push, pull-first  (mirrors gP)
 
 # Undo (in the source repo)
 alias cmUa="chezmoi git -- restore --staged . && chezmoi git -- status"   # unstage
