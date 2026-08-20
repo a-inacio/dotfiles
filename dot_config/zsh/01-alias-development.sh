@@ -320,7 +320,7 @@ git_gopen() {
 # Flow: edit a config in $HOME -> `cma`/`cmaa` to CAPTURE it into the source (they
 # also git-STAGE it, so it's ready to commit; capture BEFORE any apply, which is
 # source->$HOME and would revert an uncaptured edit) -> `cmc` then `cmP`.
-# `cmsave` does capture+stage+commit+push in one shot.
+# `cmSave` does capture+stage+commit+push in one shot.
 # ------------------------------------------------------------------------------
 alias cmlias='alias | grep "^cm"'                 # list the cm* aliases
 alias cms="chezmoi status"                        # what differs between source and $HOME
@@ -342,11 +342,11 @@ alias cmUa="chezmoi git -- restore --staged . && chezmoi git -- status"   # unst
 alias cmUc="chezmoi git -- reset HEAD^ && chezmoi git -- status"          # uncommit
 
 # One-shot "save my config changes": capture $HOME edits -> commit -> push
-alias cmsave="chezmoi_cmsave"
+alias cmSave="chezmoi_cmSave"
 
 # Functions backing the cm* aliases (tool_-prefixed, per the git_* convention)
 chezmoi_cma()    { chezmoi add "$@" && chezmoi git -- add -A; }
-chezmoi_cmsave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
+chezmoi_cmSave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
 
 # ------------------------------------------------------------------------------
 # Productivity
