@@ -315,8 +315,9 @@ git_gopen() {
 
 # ------------------------------------------------------------------------------
 # Chezmoi (dotfiles) — source is SEPARATE from $HOME (~/.local/share/chezmoi).
-# The git-on-source verbs MIRROR the g* aliases: cmc=commit (gc), cmp=pull (gp),
-# cmP=push (gP), cmUa/cmUc=undo. The chezmoi-native verbs keep chezmoi semantics.
+# The git-flavored verbs mirror g*: cmc=commit (gc), cmp=pull (gp), cmP=push (gP),
+# cmUa/cmUc=undo — note cmp is `chezmoi update` (pull remote + apply). Other cm
+# verbs keep chezmoi semantics.
 # Flow: edit a config in $HOME -> `cma`/`cmaa` to CAPTURE it into the source (they
 # also git-STAGE it, so it's ready to commit; capture BEFORE any apply, which is
 # source->$HOME and would revert an uncaptured edit) -> `cmc` then `cmP`.
@@ -328,12 +329,11 @@ alias cmd="chezmoi diff"                           # diff: source -> $HOME
 alias cme="chezmoi edit --apply"                   # edit a file's SOURCE + apply         (path)
 alias cma="chezmoi_cma"                            # capture a $HOME file into source + stage (path)
 alias cmaa="chezmoi re-add && chezmoi git -- add -A && chezmoi git -- status"   # capture ALL + stage + status
-alias cmApply="chezmoi apply"                       # apply source -> $HOME (externals auto-refresh per period; add --refresh-externals to force now)
-alias cmup="chezmoi update"                         # git pull source + apply
+alias cmap="chezmoi apply"                          # apply source -> $HOME (externals auto-refresh per period; add --refresh-externals to force now)
 alias cmcd="chezmoi cd"                             # subshell inside the source repo
 alias cmg="chezmoi git --"                          # run git in the source (e.g. cmg log)
 alias cmc="chezmoi git -- commit"                  # commit the SOURCE repo           (mirrors gc)
-alias cmp="chezmoi git -- pull --rebase"           # pull the SOURCE repo             (mirrors gp)
+alias cmp="chezmoi update"                          # pull latest from remote + apply  (mirrors gp)
 alias cmP="chezmoi git -- pull --rebase && chezmoi git -- push"   # push, pull-first  (mirrors gP)
 
 # Undo (in the source repo)
