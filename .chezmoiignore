@@ -3,4 +3,11 @@ README.md
 install.sh
 LICENSE
 
+# Private-overlay-backed files: only manage them when the corporate overlay is
+# configured (privateRepo set in local chezmoi data). On any other machine, DON'T
+# touch ~/.config/workmode/pools.toml — leave whatever exists there alone.
+{{ if not (index . "privateRepo") -}}
+.config/workmode/pools.toml
+{{ end -}}
+
 # (macOS-only alternates + the yadm bootstrap are handled in later migration stages)
