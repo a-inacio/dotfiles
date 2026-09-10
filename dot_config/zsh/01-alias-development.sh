@@ -322,9 +322,12 @@ git_gopen() {
 # also git-STAGE it, so it's ready to commit; capture BEFORE any apply, which is
 # source->$HOME and would revert an uncaptured edit) -> `cmc` then `cmP`.
 # `cmSave` does capture+stage+commit+push in one shot.
+# `cms` also surfaces git-repo externals (e.g. the private overlay): chezmoi only
+# CLONES those, never tracks their contents, so edits inside them show in their OWN
+# git — not in `chezmoi status`/`diff`. cms shows both.
 # ------------------------------------------------------------------------------
 alias cmlias='alias | grep "^cm"'                 # list the cm* aliases
-alias cms="chezmoi status"                        # what differs between source and $HOME
+alias cms="chezmoi_cms"                            # source<->$HOME diffs + git-repo externals' own git status
 alias cmd="chezmoi diff"                           # diff: source -> $HOME
 alias cme="chezmoi edit --apply"                   # edit a file's SOURCE + apply         (path)
 alias cma="chezmoi_cma"                            # capture a $HOME file into source + stage (path)
@@ -344,6 +347,22 @@ alias cmUc="chezmoi git -- reset HEAD^ && chezmoi git -- status"          # unco
 alias cmSave="chezmoi_cmSave"
 
 # Functions backing the cm* aliases (tool_-prefixed, per the git_* convention)
+chezmoi_cms() {   # chezmoi status + each git-repo external's OWN git status
+  chezmoi status "$@"
+  # chezmoi only CLONES git-repo externals (private overlay, etc.) — it never tracks
+  # their contents, so their edits are invisible to `chezmoi status`. Surface them
+  # generically: a managed dir that is itself a git work-tree IS a git-repo external
+  # (no hardcoded paths → works transparently on any machine).
+  local d dirty
+  chezmoi managed --include=dirs --path-style=absolute 2>/dev/null | while IFS= read -r d; do
+    [[ -d "$d/.git" ]] || continue
+    dirty=$(git -C "$d" status --porcelain 2>/dev/null)
+    [[ -n "$dirty" ]] || continue                    # only when actually modified
+    print -r -- ""
+    print -r -- "# git-repo external (not chezmoi-tracked) — $d"
+    git -C "$d" status --short --branch 2>/dev/null
+  done
+}
 chezmoi_cma()    { chezmoi add "$@" && chezmoi git -- add -A; }
 chezmoi_cmSave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
 chezmoi_cmp() {   # pull latest: public source (+apply), then the private overlay
