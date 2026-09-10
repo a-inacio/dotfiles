@@ -321,14 +321,18 @@ git_gopen() {
 # Flow: edit a config in $HOME -> `cma`/`cmaa` to CAPTURE it into the source (they
 # also git-STAGE it, so it's ready to commit; capture BEFORE any apply, which is
 # source->$HOME and would revert an uncaptured edit) -> `cmc` then `cmP`.
-# `cmSave` does capture+stage+commit+push in one shot.
-# `cms` also surfaces git-repo externals (e.g. the private overlay): chezmoi only
-# CLONES those, never tracks their contents, so edits inside them show in their OWN
-# git — not in `chezmoi status`/`diff`. cms shows both.
+# `cmSave` does capture+stage+commit+push in one shot (public source only).
+# `cms`/`cmd` show ALL "modified" layers: (1) source<->$HOME (uncaptured edits),
+# (2) the source repo's own pending git changes (captured, not committed), and
+# (3) git-repo externals (e.g. the private overlay — chezmoi only CLONES those, so
+# their edits live in their OWN git, invisible to chezmoi status/diff).
+# `cmSaveAll` = cmSave PLUS commit+push every dirty git-repo external ("save ALL").
+# `cmR <path>` restores a file to its tracked state (discards local edits) — managed
+# file → force-apply source->$HOME; file in a git-repo external → that repo's git restore.
 # ------------------------------------------------------------------------------
 alias cmlias='alias | grep "^cm"'                 # list the cm* aliases
 alias cms="chezmoi_cms"                            # source<->$HOME diffs + git-repo externals' own git status
-alias cmd="chezmoi diff"                           # diff: source -> $HOME
+alias cmd="chezmoi_cmd"                            # source->$HOME diff + git-repo externals' own git diff
 alias cme="chezmoi edit --apply"                   # edit a file's SOURCE + apply         (path)
 alias cma="chezmoi_cma"                            # capture a $HOME file into source + stage (path)
 alias cmaa="chezmoi re-add && chezmoi git -- add -A && chezmoi git -- status"   # capture ALL + stage + status
@@ -342,29 +346,112 @@ alias cmP="chezmoi git -- pull --rebase && chezmoi git -- push"   # push, pull-f
 # Undo (in the source repo)
 alias cmUa="chezmoi git -- restore --staged . && chezmoi git -- status"   # unstage
 alias cmUc="chezmoi git -- reset HEAD^ && chezmoi git -- status"          # uncommit
+alias cmR="chezmoi_cmR"                                                    # restore file(s): discard local edits (mirrors gR)
 
 # One-shot "save my config changes": capture $HOME edits -> commit -> push
-alias cmSave="chezmoi_cmSave"
+alias cmSave="chezmoi_cmSave"                       # public source only
+# Save ALL: public source + commit+push every dirty git-repo external (e.g. overlay)
+alias cmSaveAll="chezmoi_cmSaveAll"
 
 # Functions backing the cm* aliases (tool_-prefixed, per the git_* convention)
-chezmoi_cms() {   # chezmoi status + each git-repo external's OWN git status
-  chezmoi status "$@"
-  # chezmoi only CLONES git-repo externals (private overlay, etc.) — it never tracks
-  # their contents, so their edits are invisible to `chezmoi status`. Surface them
-  # generically: a managed dir that is itself a git work-tree IS a git-repo external
-  # (no hardcoded paths → works transparently on any machine).
-  local d dirty
+
+# git-repo externals (e.g. the private overlay) are CLONED by chezmoi but their
+# contents are NOT tracked by it — so cms/cmd/cmSaveAll/cmR must consult each
+# external's own git. Generic discovery: a managed DIR that is itself a git
+# work-tree = a git-repo external (no hardcoded paths → works transparently anywhere).
+_chezmoi_externals() {          # abs paths of ALL git-repo externals
+  local d
   chezmoi managed --include=dirs --path-style=absolute 2>/dev/null | while IFS= read -r d; do
-    [[ -d "$d/.git" ]] || continue
-    dirty=$(git -C "$d" status --porcelain 2>/dev/null)
-    [[ -n "$dirty" ]] || continue                    # only when actually modified
+    [[ -d "$d/.git" ]] && print -r -- "$d"
+  done
+}
+_chezmoi_dirty_externals() {    # ...only those with uncommitted changes
+  local d
+  for d in ${(@f)"$(_chezmoi_externals)"}; do
+    [[ -n "$d" ]] || continue
+    [[ -n "$(git -C "$d" status --porcelain 2>/dev/null)" ]] && print -r -- "$d"
+  done
+}
+_chezmoi_external_of() {        # print the external CONTAINING abs path $1, if any
+  local abs="$1" d
+  for d in ${(@f)"$(_chezmoi_externals)"}; do
+    [[ -n "$d" ]] || continue
+    [[ "$abs" == "$d" || "$abs" == "$d"/* ]] && { print -r -- "$d"; return 0; }
+  done
+  return 1
+}
+
+chezmoi_cms() {   # ALL modified layers: source<->$HOME + source-repo git + externals
+  chezmoi status "$@"                                        # (1) uncaptured $HOME edits
+  local srcst d
+  srcst=$(chezmoi git -- status --short 2>/dev/null)         # (2) captured, not committed
+  if [[ -n "$srcst" ]]; then
+    print -r -- ""
+    print -r -- "# chezmoi SOURCE repo — captured, not committed"
+    print -r -- "$srcst"
+  fi
+  for d in ${(@f)"$(_chezmoi_dirty_externals)"}; do          # (3) git-repo externals
+    [[ -n "$d" ]] || continue
     print -r -- ""
     print -r -- "# git-repo external (not chezmoi-tracked) — $d"
     git -C "$d" status --short --branch 2>/dev/null
   done
 }
+
+chezmoi_cmd() {   # ALL modified layers (diff form): source<->$HOME + source-repo git + externals
+  chezmoi diff "$@"                                          # (1) uncaptured $HOME edits
+  local srcdiff d
+  srcdiff=$(chezmoi git -- diff HEAD 2>/dev/null)            # (2) captured, not committed
+  if [[ -n "$srcdiff" ]]; then
+    print -r -- ""
+    print -r -- "# chezmoi SOURCE repo — captured, not committed"
+    print -r -- "$srcdiff"
+  fi
+  for d in ${(@f)"$(_chezmoi_dirty_externals)"}; do          # (3) git-repo externals
+    [[ -n "$d" ]] || continue
+    print -r -- ""
+    print -r -- "# git-repo external (not chezmoi-tracked) — $d"
+    git -C "$d" --no-pager diff HEAD 2>/dev/null
+  done
+}
+
 chezmoi_cma()    { chezmoi add "$@" && chezmoi git -- add -A; }
 chezmoi_cmSave() { chezmoi re-add && chezmoi git -- add -A && chezmoi git -- commit -m "${1:-update dotfiles}" && chezmoi git -- push; }
+chezmoi_cmSaveAll() {   # cmSave (public) PLUS commit+push every dirty git-repo external
+  local msg="${1:-update dotfiles}"
+  # public source: capture $HOME edits + stage; commit+push only if something changed
+  chezmoi re-add && chezmoi git -- add -A
+  if [[ -n "$(chezmoi git -- status --porcelain 2>/dev/null)" ]]; then
+    chezmoi git -- commit -m "$msg" && chezmoi git -- push \
+      || { print -u2 -- "cmSaveAll: public save failed"; return 1; }
+  else
+    print -r -- "cmSaveAll: public source — nothing to save"
+  fi
+  # git-repo externals: commit+push each dirty one (SAME message)
+  local d
+  for d in ${(@f)"$(_chezmoi_dirty_externals)"}; do
+    [[ -n "$d" ]] || continue
+    print -r -- "cmSaveAll: saving external — $d"
+    git -C "$d" add -A && git -C "$d" commit -m "$msg" && git -C "$d" push \
+      || { print -u2 -- "cmSaveAll: failed saving external $d"; return 1; }
+  done
+  print -r -- "cmSaveAll: done ✅"
+}
+chezmoi_cmR() {   # restore file(s) to tracked state — discard local edits (mirrors gR)
+  if [[ $# -eq 0 ]]; then
+    print -u2 -- "cmR: specify file(s) to restore (discards local changes)"; return 1
+  fi
+  local f abs ext rel
+  for f in "$@"; do
+    abs=${f:A}                                   # resolve to absolute
+    if ext=$(_chezmoi_external_of "$abs"); then  # inside a git-repo external?
+      rel=${abs#$ext/}
+      git -C "$ext" restore -- "$rel" && print -r -- "cmR: restored (git) $rel  [$ext]"
+    else                                         # chezmoi-managed → re-apply source->$HOME
+      chezmoi apply --force "$abs" && print -r -- "cmR: restored (chezmoi) $abs"
+    fi
+  done
+}
 chezmoi_cmp() {   # pull latest: public source (+apply), then the private overlay
   local priv="${ZDOTDIR:h}/dotfiles-private"
   # Halt rather than pull the private overlay on top of uncommitted work.
