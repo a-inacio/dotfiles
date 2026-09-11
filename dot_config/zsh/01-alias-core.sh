@@ -1,10 +1,14 @@
 # sz/ez  → reload/edit the fragment aggregator ($ZDOTDIR/00-all.sh)
 # szz/ezz → reload/edit the main rc          ($ZDOTDIR/.zshrc)
+# sZZ     → full clean restart: replace this shell with a fresh zsh (drops removed
+#           defs, re-runs compinit/PATH once — the sledgehammer when sourcing isn't enough)
 alias sz='source $ZDOTDIR/00-all.sh'
 alias ez='$EDITOR $ZDOTDIR/00-all.sh'
 
 alias szz='source $ZDOTDIR/.zshrc'
 alias ezz='$EDITOR $ZDOTDIR/.zshrc'
+
+alias sZZ='exec zsh'
 
 alias ll="ls -l"
 alias la="ls -a"
