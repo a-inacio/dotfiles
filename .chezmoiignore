@@ -5,9 +5,13 @@ LICENSE
 
 # Private-overlay-backed files: only manage them when the corporate overlay is
 # configured (privateRepo set in local chezmoi data). On any other machine, DON'T
-# touch ~/.config/workmode/pools.toml — leave whatever exists there alone.
+# touch these paths — leave whatever exists there alone. The Claude ones carry the
+# work LLM-gateway config (base URL, broker, model pins) + its credential helper, so
+# they live in the private overlay; a personal machine keeps its own settings.json.
 {{ if not (index . "privateRepo") -}}
 .config/workmode/pools.toml
+.claude/settings.json
+.claude/bin/get-gateway-key.sh
 {{ end -}}
 
 # (macOS-only alternates + the yadm bootstrap are handled in later migration stages)
