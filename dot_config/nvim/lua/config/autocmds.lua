@@ -26,3 +26,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.includeexpr = "v:lua.shell_dotfile_gf(v:fname)"
   end,
 })
+
+-- Markdown: no soft wrap (LazyVim's `lazyvim_wrap_spell` turns it on; spell stays).
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("md_nowrap", { clear = true }),
+  pattern = { "markdown", "markdown.mdx" },
+  callback = function()
+    vim.opt_local.wrap = false
+    vim.opt_local.sidescrolloff = 0 -- let the cursor reach the true end of a wide table row
+  end,
+})

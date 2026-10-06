@@ -11,5 +11,10 @@ return {
   ft = { "markdown", "markdown.mdx" }, -- lazy-load on markdown buffers only
   ---@module 'render-markdown'
   ---@type render.md.UserConfig
-  opts = {},
+  opts = {
+    -- Wide tables: 'trimmed' subtracts the source's padding whitespace from the
+    -- computed column width, so a table with long cells stays far narrower on
+    -- screen than its raw text. Pairs with nowrap (see config/autocmds.lua).
+    pipe_table = { cell = "trimmed", preset = "round" },
+  },
 }
