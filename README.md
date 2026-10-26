@@ -37,4 +37,4 @@ install has no effect. Install the font in Windows and point the terminal at it:
   via `lazy-lock.json`.
 - **tmux** — press `prefix + I` on first run to install plugins.
 - **Day-to-day** (via the `cm*` aliases): edit a config, then `cmaa` to capture it into the source and
-  `cmsave "msg"` to commit + push; `cmup` to sync another machine.
+  `cmSave "msg"` to commit + push; `cmp` to sync another machine.
