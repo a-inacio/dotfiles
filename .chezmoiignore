@@ -10,6 +10,7 @@ LICENSE
 # they live in the private overlay; a personal machine keeps its own settings.json.
 {{ if not (index . "privateRepo") -}}
 .config/workmode/pools.toml
+.config/workmode/machine.toml
 .claude/settings.json
 .claude/bin/get-gateway-key.sh
 {{ end -}}
