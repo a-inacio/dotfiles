@@ -19,9 +19,6 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 export VISUAL=nvim
 export EDITOR=nvim
-# WSL: open URLs in the Windows browser. Python's webbrowser (gcloud, az, MSAL) tries $BROWSER
-# first; otherwise it goes via xdg-open, which goes to any Linux browser installed in WSL.
-command -v wslview >/dev/null && export BROWSER=wslview
 
 # History — pin HISTFILE explicitly. The oh-my-zsh lib only sets it when empty
 # (`[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"`), so without this the
