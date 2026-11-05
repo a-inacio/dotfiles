@@ -11,6 +11,7 @@ LICENSE
 {{ if not (index . "privateRepo") -}}
 .config/workmode/pools.toml
 .config/workmode/machine.toml
+.config/git/ignore
 .claude/settings.json
 .claude/bin/get-gateway-key.sh
 {{ end -}}
