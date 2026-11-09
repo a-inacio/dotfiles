@@ -1,0 +1,4 @@
+# markdown-oxide global settings (read for every vault; a vault's .moxide.toml overrides).
+# excluded_folders matches a folder NAME anywhere in the tree (src/vault/mod.rs) — these are the workmode
+# folders Obsidian also hides (.obsidian/app.json userIgnoreFilters): external-repo symlinks + sample code.
+excluded_folders = ["References", "Dependencies", "Samples", "repos"]

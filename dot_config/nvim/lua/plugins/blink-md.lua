@@ -1,6 +1,6 @@
--- blink.cmp: no automatic completion popup in markdown — candidates there come from
--- the buffer/path sources, not an LSP, so it fires on ordinary prose.
--- `<C-space>` still opens it on demand; other filetypes are untouched.
+-- blink.cmp in markdown: no automatic popup on ordinary prose (buffer/path candidates fire on every
+-- word) EXCEPT inside an open `[[` wikilink, where markdown-oxide offers note/heading completions.
+-- `<C-space>` still opens it on demand anywhere; other filetypes are untouched.
 return {
   "saghen/blink.cmp",
   opts = {
@@ -8,7 +8,11 @@ return {
       menu = {
         ---@param ctx blink.cmp.Context
         auto_show = function(ctx)
-          return not vim.tbl_contains({ "markdown", "markdown.mdx" }, vim.bo[ctx.bufnr].filetype)
+          if not vim.tbl_contains({ "markdown", "markdown.mdx" }, vim.bo[ctx.bufnr].filetype) then
+            return true
+          end
+          local before = ctx.line:sub(1, ctx.cursor[2])
+          return before:match("%[%[[^%]]*$") ~= nil -- typing inside an unclosed [[
         end,
       },
       ghost_text = {
