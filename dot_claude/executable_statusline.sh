@@ -111,8 +111,12 @@ resolve_workmode() {   # $1 = cwd -> prints the label, or returns 1
   fi
   core=$(workmode core 2>/dev/null) || return 1
   [[ -n "$core" ]] || return 1
-  # timeout: a wedged workspace scan must never hang the status line
-  label=$(WM_CORE="$core" WM_DIR="$dir" timeout 5 python3 -c '
+  # timeout: a wedged workspace scan must never hang the status line. macOS has no
+  # `timeout` (coreutils installs it as gtimeout); without either, run unguarded.
+  local to=()
+  if   command -v timeout  >/dev/null 2>&1; then to=(timeout 5)
+  elif command -v gtimeout >/dev/null 2>&1; then to=(gtimeout 5); fi
+  label=$(WM_CORE="$core" WM_DIR="$dir" ${to[@]+"${to[@]}"} python3 -c '
 import sys, os
 sys.path.insert(0, os.path.join(os.environ["WM_CORE"], "engine", "scripts"))
 from work import discover_workspaces

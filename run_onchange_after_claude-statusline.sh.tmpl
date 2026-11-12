@@ -12,10 +12,14 @@
   Only the `statusLine` key is written; every other setting is preserved. Claude
   Code itself rewrites settings.json (/config), which is why the file is merged
   here rather than owned by chezmoi.
-  run_onchange: re-runs only when this rendered script changes.
+  run_onchange: re-runs only when this rendered script changes. The jq path below is
+  part of the rendered text ON PURPOSE: without jq the script can only warn and
+  exit 0, which chezmoi records as "done". Installing jq later changes the text,
+  so the script runs again.
 */ -}}
 {{- if not (index . "privateRepo") -}}
 #!/usr/bin/env bash
+# jq: {{ lookPath "jq" }}
 set -euo pipefail
 
 F="$HOME/.claude/settings.json"
