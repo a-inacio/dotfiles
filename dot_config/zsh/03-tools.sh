@@ -21,7 +21,19 @@ autoload -U +X bashcompinit && bashcompinit
 
 # fzf — keybindings + completion
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-(( $+commands[fzf] )) && source <(fzf --zsh)
+# `fzf --zsh` needs fzf >= 0.48; older builds (e.g. Ubuntu 22.04 apt = 0.29) print
+# "unknown option: --zsh" and trip p10k's instant-prompt warning. Fall back silently
+# to the distro's legacy scripts when present.
+if (( $+commands[fzf] )); then
+  if _fzf_init="$(fzf --zsh 2>/dev/null)"; then
+    eval "$_fzf_init"
+  else
+    for _f in /usr/share/doc/fzf/examples/{key-bindings,completion}.zsh; do
+      [ -f "$_f" ] && source "$_f"
+    done
+  fi
+  unset _fzf_init _f
+fi
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
