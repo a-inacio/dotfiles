@@ -2,6 +2,11 @@
 README.md
 install.sh
 LICENSE
+# Real lazy.nvim lockfile; ~/.config/nvim/lazy-lock.json is a symlink to it
+# (dot_config/nvim/symlink_lazy-lock.json.tmpl), so Neovim writes plugin updates
+# straight into this repo: no "changed since chezmoi last wrote it" prompts, and
+# updates show up in `git status` to commit when you're happy with them.
+nvim/
 
 # Private-overlay-backed files: only manage them when the corporate overlay is
 # configured (privateRepo set in local chezmoi data). On any other machine, DON'T
