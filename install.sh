@@ -34,6 +34,7 @@ ensure() { command -v "$1" >/dev/null 2>&1 && info "$1 present" || { info "insta
 ensure git
 ensure zsh
 ensure curl
+ensure jq      # the Claude Code status line (~/.claude/statusline.sh) parses its stdin with it
 
 # --- 2. chezmoi (root-free) --------------------------------------------------
 if ! command -v chezmoi >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/chezmoi" ]; then

@@ -31,6 +31,28 @@ install has no effect. Install the font in Windows and point the terminal at it:
 
 (`p10k configure` also offers to install the font, but the manual install above is the reliable path.)
 
+## Claude Code status line
+
+`~/.claude/statusline.sh` (needs `jq` + a Nerd Font):
+
+```text
+Opus 5.5 · myproj@dotfiles        ctx ███░░░░░░░  31% 󰔟 · 5h  23% 2h14m · wk  41% 3d4h
+```
+
+- **ctx**: context-window use, plus an hourglass for the prompt cache (green → orange → red =
+  warm → about to expire → cold, when the next request re-writes the whole prefix).
+- **5h / wk**: subscription plan usage, i.e. the 5-hour and weekly rate-limit windows, % used and
+  time to reset. Claude Code sends these only to Pro/Max subscribers, after the first response.
+  Without them the slot shows the gateway `spend` limit, else the local `~$` session estimate.
+- Location is the workmode `project@domain` when `workmode` is installed, else the path.
+
+Everything comes from Claude Code's stdin: no network calls. `chezmoi apply` sets `statusLine` in
+`~/.claude/settings.json` (that key only; the rest is kept) unless something else already owns it:
+a different `statusLine` command is kept, and a symlinked `settings.json` is left alone. Machines
+with the private overlay keep their own `settings.json` and status line.
+Tune with `CLAUDE_STATUSLINE_MARGIN` / `_BAR_WIDTH` / `_PROJECT_MAX`. For alignment, point
+`statusLine.command` at `~/.claude/statusline.sh --ruler` once to find the clipped margin.
+
 ## Notes
 
 - **Neovim** uses [LazyVim](https://www.lazyvim.org) — plugins install on first `nvim` launch, pinned
