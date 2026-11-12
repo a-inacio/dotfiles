@@ -17,7 +17,7 @@
 # no background jobs. The only on-disk cache is the per-cwd workmode label (below).
 #
 # Install: chezmoi puts this at ~/.claude/statusline.sh and points
-# settings.json `statusLine.command` at it (run_onchange_after_claude-statusline).
+# settings.json `statusLine.command` at it (run_after_claude-statusline).
 # Machines with the private overlay keep their own status line instead.
 #
 # Docs: https://code.claude.com/docs/en/statusline

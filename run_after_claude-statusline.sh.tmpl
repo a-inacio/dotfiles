@@ -12,14 +12,13 @@
   Only the `statusLine` key is written; every other setting is preserved. Claude
   Code itself rewrites settings.json (/config), which is why the file is merged
   here rather than owned by chezmoi.
-  run_onchange: re-runs only when this rendered script changes. The jq path below is
-  part of the rendered text ON PURPOSE: without jq the script can only warn and
-  exit 0, which chezmoi records as "done". Installing jq later changes the text,
-  so the script runs again.
+  run_after (not run_onchange): runs on every `chezmoi apply`, so the key is
+  restored if another tool rewrites settings.json and drops it (e.g. iTerm2's
+  Claude Code hook integration), and it also picks up jq installed after a
+  first apply that could only warn. A no-op when the key is already as desired.
 */ -}}
 {{- if not (index . "privateRepo") -}}
 #!/usr/bin/env bash
-# jq: {{ lookPath "jq" }}
 set -euo pipefail
 
 F="$HOME/.claude/settings.json"
@@ -41,6 +40,9 @@ if [ -s "$F" ]; then
   if [ -n "$current" ] && [ "$current" != "$CMD" ] && [ "$current" != "$HOME/.claude/statusline.sh" ]; then
     warn "statusLine already points at '$current'; keeping your override"; exit 0
   fi
+  jq -e --arg cmd "$CMD" --argjson r "$REFRESH" \
+     '.statusLine == {type: "command", command: $cmd, padding: 0, refreshInterval: $r}' \
+     "$F" >/dev/null 2>&1 && exit 0   # already wired: leave the file untouched
   src="$F"
 else
   src=/dev/null   # absent or empty: start from {}
